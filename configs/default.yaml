@@ -1,7 +1,7 @@
 defaults:
   - agent: default
-  - environment: quicksand_distract
-  - monitor: n
+  - environment: river_swim
+  - monitor: binary_stateless
   - algorithm: q_visit
   - _self_
   - override hydra/hydra_logging: disabled
@@ -16,7 +16,7 @@ wandb:
   project: explore_benchmark
 
 experiment:
-  testing_points: 1000
+  testing_points: 500
   datadir: null
   debugdir: null
   rng_seed: 1

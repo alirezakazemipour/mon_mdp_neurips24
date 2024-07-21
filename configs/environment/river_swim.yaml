@@ -4,7 +4,7 @@ environment:
   id: Gym-Grid/RiverSwim-6-v0
 
 experiment:
-  training_steps: 20000
+  training_steps: 25000
   testing_episodes: 100
 
 agent:

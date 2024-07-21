@@ -20,18 +20,11 @@ def run(cfg: DictConfig) -> None:
     # pprint(config)
 
     group = dict_to_id(cfg.environment) + "/" + dict_to_id(cfg.monitor)
-    sha = git.Repo(search_parent_directories=True).head.object.hexsha
-    base_folder = os.path.join(sha, group)
+    base_folder = group
     run_id = "_".join(
         [
-            str(cfg.algorithm.id),
-            str(cfg.agent.critic.q0_min),
-            str(cfg.agent.critic.q0_max),
-            str(cfg.agent.critic.q0_visit_min),
-            str(cfg.agent.critic.q0_visit_max),
-            str(cfg.agent.actor.eps.init_value),
-            str(cfg.agent.actor.eps.min_value),
-            str(cfg.agent.actor.beta_bar),
+            str(cfg.monitor.id),
+            str(cfg.monitor.prob),
             str(cfg.experiment.rng_seed),
         ]
     )
