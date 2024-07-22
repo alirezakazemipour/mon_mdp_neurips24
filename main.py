@@ -25,6 +25,8 @@ def run(cfg: DictConfig) -> None:
         [
             str(cfg.monitor.id),
             str(cfg.monitor.prob),
+            str(cfg.agent.critic.q0_max),
+            str(cfg.agent.critic.r0_max),
             str(cfg.experiment.rng_seed),
         ]
     )

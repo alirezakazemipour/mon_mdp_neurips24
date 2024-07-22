@@ -725,7 +725,7 @@ class NeverObsButtonMonitor(Monitor):
         s = self.np_random.random()
         if self.monitor_state == 1:
             if s < self.prob:
-                if env_obs != 1 and env_obs != 4:
+                if env_next_obs != 1 and env_next_obs != 4:
                     proxy_reward = env_reward
                 else:
                     proxy_reward = np.nan

@@ -1,7 +1,7 @@
 defaults:
-  - agent: default
-  - environment: river_swim
-  - monitor: binary_stateless
+  - agent: optimistic_init
+  - environment: penalty
+  - monitor: never_obs_binary_stateless
   - algorithm: q_visit
   - _self_
   - override hydra/hydra_logging: disabled

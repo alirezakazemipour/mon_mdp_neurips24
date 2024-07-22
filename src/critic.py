@@ -112,13 +112,13 @@ class QTableCritic(QCritic):
         self.q = MSETable(
             *self.obs_shape,
             *self.act_shape,
-            init_value_min=q0_min,
+            init_value_min=q0_max,
             init_value_max=q0_max,
         )
         self.q_target = self.q  # with tabular Q we don't need a different target
         self.r = RunningMeanTable(
             *self.env_shape,
-            init_value_min=r0_min,
+            init_value_min=r0_max,
             init_value_max=r0_max,
         )
         self.reward_count = CountTable(*self.env_shape)  # N(sE,aE) when reward is observed
