@@ -2,19 +2,22 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 
-n_runs = 100
+q_max = -100#, -100
+r_max = 1#, 0
+
+n_runs = 2
 algos = [
-    "iNeverObsButtonMonitor_p1",
+    "iStatelessBinaryMonitor_p1",
     # "iStatelessBinaryMonitor_p0.75",
     # "iStatelessBinaryMonitor_p0.5",
     # "iStatelessBinaryMonitor_p0.25",
-    "iNeverObsButtonMonitor_p0.1",
+    "iStatelessBinaryMonitor_p0.1",
     # "iStatelessBinaryMonitor_p0.01"
 ]
 for algo in algos:
     runs = []
     for i in range(n_runs):
-        x = np.load(f"data/iGym-Grid/grid_world/{algo}/{algo[1:].replace("p", "")}_{i}.npz")
+        x = np.load(f"data/iGym-Grid/RiverSwim-6-v0/{algo}/{algo[1:].replace("p", "")}_{q_max}_{r_max}_{i}.npz")
         runs.append(x["test/return"])
     # print(np.argmin(np.asarray(runs).sum(-1)))
     # exit()

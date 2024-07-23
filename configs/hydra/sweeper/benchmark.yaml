@@ -3,13 +3,13 @@
 _target_: hydra._internal.core_plugins.basic_sweeper.BasicSweeper
 max_batch_size: null
 params:
-  environment: penalty
-  monitor: never_obs_binary_stateless, never_obs_button, button, binary_stateless
+  environment: river_swim
+  monitor: button, binary_stateless
   experiment.datadir: data
   experiment.hide_progress_bar: True
-  experiment.rng_seed: range(0, 100)
+  experiment.rng_seed: range(0, 2)
   agent: optimistic_init
-  agent.critic.q0_max: -100, 1
-  agent.critic.r0_max: -10, 1
+  agent.critic.q0_max: -100, 55
+  agent.critic.r0_max: 0, 1
   algorithm: q_visit
   monitor.prob: 1, 0.1

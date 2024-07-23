@@ -100,8 +100,8 @@ class QTableCritic(QCritic):
         self,
         n_obs_env: int, n_obs_mon: int,
         n_act_env: int, n_act_mon: int,
-        q0_min: float, q0_max: float,
-        r0_min: float, r0_max: float,
+        q0_max: float,
+        r0_max: float,
         **kwargs
     ):  # fmt: skip
         QCritic.__init__(self, **kwargs)
@@ -112,13 +112,11 @@ class QTableCritic(QCritic):
         self.q = MSETable(
             *self.obs_shape,
             *self.act_shape,
-            init_value_min=q0_max,
             init_value_max=q0_max,
         )
         self.q_target = self.q  # with tabular Q we don't need a different target
         self.r = RunningMeanTable(
             *self.env_shape,
-            init_value_min=r0_max,
             init_value_max=r0_max,
         )
         self.reward_count = CountTable(*self.env_shape)  # N(sE,aE) when reward is observed
@@ -167,7 +165,7 @@ class QTableCriticWithVisitQ(QTableCritic):
         self,
         n_obs_env: int, n_obs_mon: int,
         n_act_env: int, n_act_mon: int,
-        q0_visit_min: float, q0_visit_max: float,
+        q0_visit_max: float,
         gamma_visit: float,
         lr_visit: DictConfig,
         **kwargs,
@@ -179,7 +177,6 @@ class QTableCriticWithVisitQ(QTableCritic):
             *self.obs_shape,
             *self.act_shape,
             n_obs_env * n_obs_mon * n_act_env * n_act_mon,
-            init_value_min=q0_visit_min,
             init_value_max=q0_visit_max,
         )
         self.q_visit_target = self.q_visit

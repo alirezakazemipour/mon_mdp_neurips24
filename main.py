@@ -55,25 +55,6 @@ def run(cfg: DictConfig) -> None:
             with open_dict(cfg):
                 cfg.monitor.button_cell_id = 16
 
-    # Fix max Q for infinite horizon MDPs
-    if cfg.environment.id in ["RiverSwim"]:
-        if cfg.agent.critic.q0_max == 1.0:  # optimistic
-            cfg.agent.critic.q0_max = 50.0
-        if cfg.agent.critic.q0_min == 1.0:
-            cfg.agent.critic.q0_min = 50.0
-
-    # More training steps for Mon-MDPs
-    if cfg.monitor.id in ["NMonitor"]:
-        cfg.experiment.training_steps *= 10
-    elif cfg.monitor.id in ["ButtonMonitor"]:
-        cfg.experiment.training_steps *= 2
-    elif cfg.monitor.id in ["StatelessBinaryMonitor"]:
-        cfg.experiment.training_steps *= 3
-    elif cfg.monitor.id in ["LevelMonitor"]:
-        cfg.experiment.training_steps *= 20
-    elif cfg.monitor.id in ["BatteryMonitor"]:
-        cfg.experiment.training_steps *= 10
-
     # Decay learning rate in stochastic monitors
     if cfg.monitor.id in ["NMonitor"]:
         cfg.agent.critic.lr.min_value = min(0.1, cfg.agent.critic.lr.min_value)

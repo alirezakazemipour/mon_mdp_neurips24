@@ -49,6 +49,11 @@ GRIDS = {
         [EMPTY, EMPTY, EMPTY],
         [EMPTY, EMPTY, GOOD],
     ],
+"3x3_stochastic": [
+        [EMPTY, BAD, GOOD],
+        [EMPTY, BAD, EMPTY],
+        [EMPTY, EMPTY, EMPTY],
+    ],
     "3x3_empty_loop": [
         [EMPTY, LEFT, EMPTY],
         [EMPTY, RIGHT, UP],
@@ -584,4 +589,56 @@ class RiverSwim(Gridworld):
         elif state == first and action == LEFT and original_action == LEFT:
             reward = 0.01
 
+        if reward != 0.0:
+            reward += self.np_random.normal() * 0.05
+
         return obs, reward, terminated, truncated, info
+
+class StochasticMiniGrid(Gridworld):
+
+    def _step(self, action: int):
+
+        self.last_pos = self.agent_pos
+        if self.np_random.random() < self.random_action_prob:
+            action = self.action_space.sample()
+        self.last_action = action
+
+        if self.grid[self.agent_pos] == QCKSND and self.np_random.random() > 0.1:
+            pass  # fail to move in quicksand
+        else:
+            if (
+                    self.grid[self.agent_pos] == LEFT and action != LEFT or
+                    self.grid[self.agent_pos] == RIGHT and action != RIGHT or
+                    self.grid[self.agent_pos] == UP and action != UP or
+                    self.grid[self.agent_pos] == DOWN and action != DOWN
+            ):  # fmt: skip
+                pass  # fail to move in one-direction cell
+            else:
+                self.agent_pos = _move(
+                    self.agent_pos[0],
+                    self.agent_pos[1],
+                    action,
+                    self.n_rows,
+                    self.n_cols
+                )  # fmt: skip
+
+        if self.grid[self.agent_pos] == WALL:
+            self.agent_pos = self.last_pos
+
+        terminated = False
+        reward = REWARDS[self.grid[self.agent_pos]]
+        if self.grid[self.agent_pos] in [GOOD, GOOD_SMALL]:
+            if action == STAY:  # positive rewards are collected only with STAY
+                terminated = True
+            else:
+                reward = 0
+        if self.reward_noise_std > 0.0:
+            reward += self.np_random.normal() * self.reward_noise_std
+        if reward != 0.0 and self.nonzero_reward_noise_std > 0.0:
+            reward += self.np_random.normal() * self.nonzero_reward_noise_std
+
+        if self.last_pos == (0, 0) and action == RIGHT:
+            if self.np_random.random() < 0.3:
+                self.agent_pos = (1, 0)
+
+        return self.get_state(), reward, terminated, False, {}

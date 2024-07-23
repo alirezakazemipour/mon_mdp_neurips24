@@ -60,7 +60,7 @@ class Table(FunctionApproximator):
         (3,)
     """
 
-    def __init__(self, *shape, init_value_min: float = 0.0, init_value_max: float = 0.0, **kwargs):
+    def __init__(self, *shape, init_value_max: float = 0.0, **kwargs):
         """
         Args:
             shape (int...): a sequence of integers defining the shape of the table,
@@ -70,10 +70,12 @@ class Table(FunctionApproximator):
         """
 
         self.shape = shape
-        assert init_value_min <= init_value_max, "invalid initialization"
-        self._init_value_min = init_value_min
         self._init_value_max = init_value_max
-        self._table = np.random.uniform(init_value_min, init_value_max, shape)
+        self._table = np.random.uniform(
+            self._init_value_max,
+            self._init_value_max,
+            self.shape,
+        )
 
     def __call__(self, *args):
         if not args:
@@ -85,7 +87,7 @@ class Table(FunctionApproximator):
 
     def reset(self):
         self._table = np.random.uniform(
-            self._init_value_min,
+            self._init_value_max,
             self._init_value_max,
             self.shape,
         )

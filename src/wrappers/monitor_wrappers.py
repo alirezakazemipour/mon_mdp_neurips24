@@ -652,10 +652,11 @@ class NeverObsStatelessBinaryMonitor(Monitor):
         return np.array(0)
 
     def _monitor_step(self, action, env_reward):
-        env_obs = self.env.unwrapped.get_state()
+        env_next_obs = self.env.unwrapped.get_state()
+
         s = self.np_random.random()
         if action["mon"] == 1 and s < self.prob:
-            if env_obs != 1 and env_obs != 4:
+            if env_next_obs != 1 and env_next_obs != 4:
                 proxy_reward = env_reward
             else:
                 proxy_reward = np.nan
@@ -666,7 +667,9 @@ class NeverObsStatelessBinaryMonitor(Monitor):
         else:
             proxy_reward = np.nan
             monitor_reward = 0.0
-        return self._monitor_get_state(), proxy_reward, monitor_reward, False
+        monitor_obs = self.monitor_state
+        monitor_terminated = False
+        return monitor_obs, proxy_reward, monitor_reward, monitor_terminated
 
 
 class NeverObsButtonMonitor(Monitor):
