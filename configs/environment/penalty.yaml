@@ -5,4 +5,5 @@ environment:
 
 experiment:
   training_steps: 50000
-  testing_episodes: 1
+  testing_points: 500
+  testing_episodes: 100

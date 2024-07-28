@@ -19,7 +19,7 @@ def run(cfg: DictConfig) -> None:
     config = OmegaConf.to_container(cfg, resolve=True, throw_on_missing=True)
     # pprint(config)
 
-    group = dict_to_id(cfg.environment) + "/" + dict_to_id(cfg.monitor)
+    group = dict_to_id(cfg.environment) + "/" + str(cfg.monitor.id) + "_" + str(cfg.monitor.prob)
     base_folder = group
     run_id = "_".join(
         [

@@ -7,9 +7,10 @@ params:
   monitor: button, binary_stateless
   experiment.datadir: data
   experiment.hide_progress_bar: True
-  experiment.rng_seed: range(0, 2)
+  experiment.rng_seed: range(0, 30)
   agent: optimistic_init
-  agent.critic.q0_max: -100, 55
-  agent.critic.r0_max: 0, 1
+  agent.critic.q0_max: -10
+  agent.critic.r0_max: 1
   algorithm: q_visit
-  monitor.prob: 1, 0.1
+  monitor.prob: 1.00, 0.75, 0.50, 0.25, 0.10
+  ++monitor.button_cell_id: 0

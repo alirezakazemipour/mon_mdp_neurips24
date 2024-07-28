@@ -3,6 +3,7 @@
 monitor:
   id: ButtonMonitor
   prob: 1
+  button_cell_id: 0
 
 experiment:
   testing_episodes: 100

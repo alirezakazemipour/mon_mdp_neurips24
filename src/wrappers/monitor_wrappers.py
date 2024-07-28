@@ -560,7 +560,7 @@ class ButtonMonitor(Monitor):
         env_action_push (int): the environment action to turn the monitor on/off.
     """
 
-    def __init__(self, env, monitor_cost=0.2, monitor_end_cost=2.0, button_cell_id=8, **kwargs):
+    def __init__(self, env, monitor_cost=0.2, monitor_end_cost=2.0, **kwargs):
         Monitor.__init__(self, env, **kwargs)
         self.action_space = spaces.Dict({
             "env": env.action_space,
@@ -570,7 +570,7 @@ class ButtonMonitor(Monitor):
             "env": env.observation_space,
             "mon": spaces.Discrete(2),  # monitor on/off
         })  # fmt: skip
-        self.button_cell_id = button_cell_id
+        self.button_cell_id = kwargs["button_cell_id"]
         self.monitor_state = 0
         self.monitor_cost = monitor_cost
         self.monitor_end_cost = monitor_end_cost
@@ -603,7 +603,15 @@ class ButtonMonitor(Monitor):
             monitor_reward += -self.monitor_cost
             if env_terminated:
                 monitor_reward += -self.monitor_end_cost
-        if action["env"] == 1 and env_obs == self.button_cell_id:  # 0 is LEFT
+
+        if self.button_cell_id == 8:
+            tmp = 1
+        elif self.button_cell_id == 0:
+            tmp = 0
+        else:
+            raise RuntimeError
+
+        if action["env"] == tmp and env_obs == self.button_cell_id:
             if self.monitor_state == 1:
                 self.monitor_state = 0
             elif self.monitor_state == 0:
@@ -691,7 +699,7 @@ class NeverObsButtonMonitor(Monitor):
         env_action_push (int): the environment action to turn the monitor on/off.
     """
 
-    def __init__(self, env, monitor_cost=0.2, monitor_end_cost=2.0, button_cell_id=8, **kwargs):
+    def __init__(self, env, monitor_cost=0.2, monitor_end_cost=2.0, **kwargs):
         Monitor.__init__(self, env, **kwargs)
         self.action_space = spaces.Dict({
             "env": env.action_space,
@@ -701,7 +709,7 @@ class NeverObsButtonMonitor(Monitor):
             "env": env.observation_space,
             "mon": spaces.Discrete(2),  # monitor on/off
         })  # fmt: skip
-        self.button_cell_id = button_cell_id
+        self.button_cell_id = kwargs["button_cell_id"]
         self.monitor_state = 0
         self.monitor_cost = monitor_cost
         self.monitor_end_cost = monitor_end_cost
@@ -738,7 +746,13 @@ class NeverObsButtonMonitor(Monitor):
             if env_terminated:
                 monitor_reward += -self.monitor_end_cost
 
-        if action["env"] == 1 and env_obs == self.button_cell_id:  # 0 is LEFT
+        if self.button_cell_id == 8:
+            tmp = 1
+        elif self.button_cell_id == 0:
+            tmp = 0
+        else:
+            raise RuntimeError
+        if action["env"] == tmp and env_obs == self.button_cell_id:
             if self.monitor_state == 1:
                 self.monitor_state = 0
             elif self.monitor_state == 0:
