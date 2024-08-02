@@ -196,9 +196,9 @@ class QTableCriticWithVisitQ(QTableCritic):
         next_obs_env, next_obs_mon,
     ):  # fmt: skip
         q_visit_next = self.q_visit_target(next_obs_env, next_obs_mon)
-        rwd_visit = np.zeros((q_visit_next.shape[0], q_visit_next.shape[-1]))
+        rwd_visit = np.zeros((q_visit_next.shape[0], q_visit_next.shape[-1])) - 1
         idx = np.ravel_multi_index((obs_env, obs_mon, act_env, act_mon), self.q.shape)
-        rwd_visit[:, idx] = 1.0
+        rwd_visit[:, idx] = 0
         target = td_target(
             rwd_visit,
             np.logical_or(term[:, None], rwd_visit),

@@ -2,7 +2,7 @@
 
 monitor:
   id: ButtonMonitor
-  prob: 1
+  prob: 0.10
   button_cell_id: 0
 
 experiment:

@@ -5,7 +5,7 @@ from omegaconf import DictConfig, OmegaConf, open_dict
 import os
 import numpy as np
 from pprint import pprint  # noqa: F401
-import git
+import pickle
 
 from src.utils import dict_to_id
 from src.experiment import Experiment
@@ -19,12 +19,16 @@ def run(cfg: DictConfig) -> None:
     config = OmegaConf.to_container(cfg, resolve=True, throw_on_missing=True)
     # pprint(config)
 
-    group = dict_to_id(cfg.environment) + "/" + str(cfg.monitor.id) + "_" + str(cfg.monitor.prob)
+    if "prob" in cfg.monitor:
+        prob = "_" + str(cfg.monitor.prob)
+    else:
+        prob = ""
+    group = dict_to_id(cfg.environment) + "/" + str(cfg.monitor.id) + prob
     base_folder = group
     run_id = "_".join(
         [
             str(cfg.monitor.id),
-            str(cfg.monitor.prob),
+            prob,
             str(cfg.agent.critic.q0_max),
             str(cfg.agent.critic.r0_max),
             str(cfg.experiment.rng_seed),
@@ -81,6 +85,10 @@ def run(cfg: DictConfig) -> None:
 
     if cfg.experiment.datadir is not None:
         np.savez(filepath, **data)
+        savepath = os.path.join(filepath, "configs.pkl")
+        if not os.path.isfile(savepath + ".npz"):
+            with open(savepath, 'wb') as f:
+                pickle.dump(cfg, f)
 
     if cfg.experiment.debugdir is not None:
         from plot_gridworld_agent import plot_agent

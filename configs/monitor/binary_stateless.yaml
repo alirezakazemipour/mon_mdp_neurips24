@@ -2,4 +2,4 @@
 
 monitor:
   id: StatelessBinaryMonitor
-  prob: 1
+  prob: 0.1
