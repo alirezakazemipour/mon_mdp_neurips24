@@ -29,8 +29,6 @@ def run(cfg: DictConfig) -> None:
         [
             str(cfg.monitor.id),
             prob,
-            str(cfg.agent.critic.q0_max),
-            str(cfg.agent.critic.r0_max),
             str(cfg.experiment.rng_seed),
         ]
     )
@@ -38,6 +36,10 @@ def run(cfg: DictConfig) -> None:
     if cfg.experiment.datadir is not None:
         filepath = os.path.join(cfg.experiment.datadir, base_folder)
         os.makedirs(filepath, exist_ok=True)
+        savepath = os.path.join(filepath, "configs.pkl")
+        if not os.path.isfile(savepath):
+            with open(savepath, 'wb') as f:
+                pickle.dump(cfg, f)
         filepath = os.path.join(filepath, run_id)
         if os.path.isfile(filepath + ".npz"):
             print("   [RUN ALREADY DONE]")
@@ -53,16 +55,6 @@ def run(cfg: DictConfig) -> None:
         ),
         **cfg.wandb,
     )
-
-    if cfg.environment.id in ["Gym-Grid/Gridworld-TwoRoom-Distract-Middle-2x11-v0"]:
-        if cfg.monitor.id in ["ButtonMonitor"]:
-            with open_dict(cfg):
-                cfg.monitor.button_cell_id = 16
-
-    # Decay learning rate in stochastic monitors
-    if cfg.monitor.id in ["NMonitor"]:
-        cfg.agent.critic.lr.min_value = min(0.1, cfg.agent.critic.lr.min_value)
-        cfg.agent.critic.lr_visit.min_value = min(0.1, cfg.agent.critic.lr_visit.min_value)
 
     env = gymnasium.make(**cfg.environment)
     if "reward_noise_std" in cfg.environment.keys():
@@ -85,10 +77,6 @@ def run(cfg: DictConfig) -> None:
 
     if cfg.experiment.datadir is not None:
         np.savez(filepath, **data)
-        savepath = os.path.join(filepath, "configs.pkl")
-        if not os.path.isfile(savepath + ".npz"):
-            with open(savepath, 'wb') as f:
-                pickle.dump(cfg, f)
 
     if cfg.experiment.debugdir is not None:
         from plot_gridworld_agent import plot_agent

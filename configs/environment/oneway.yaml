@@ -1,0 +1,14 @@
+# @package _global_
+
+environment:
+  id: Gym-Grid/Gridworld-Corridor-3x4-v0
+
+experiment:
+  training_steps: 20000
+  testing_episodes: 100
+  testing_points: 200
+
+monitor:
+  button_cell_id: 8
+  button_flip_act: 1
+  forbidden_states:

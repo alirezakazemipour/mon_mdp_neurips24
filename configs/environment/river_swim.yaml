@@ -4,9 +4,9 @@ environment:
   id: Gym-Grid/RiverSwim-6-v0
 
 experiment:
-  training_steps: 10000
+  training_steps: 20000
   testing_episodes: 100
-  testing_points: 100
+  testing_points: 200
 
 agent:
   critic:
@@ -16,3 +16,8 @@ agent:
     lr_visit:
       init_value: 0.5
       min_value: 0.05
+
+monitor:
+  button_cell_id: 0
+  button_flip_act: 0
+  forbidden_states:

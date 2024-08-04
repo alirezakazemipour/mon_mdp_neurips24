@@ -2,8 +2,4 @@
 
 monitor:
   id: ButtonMonitor
-  prob: 0.10
-  button_cell_id: 0
-
-experiment:
-  testing_episodes: 100
+  prob: 0.25

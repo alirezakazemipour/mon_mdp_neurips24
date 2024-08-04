@@ -1,11 +1,10 @@
 critic:
   id: QTableCritic
-  q0_max: -10
-  q0_visit_max: -1
-  q0_visit_min: -1
-  r0_max: 1
-  gamma: 1
-  gamma_visit: 1
+  q0: -10
+  q0_visit: 1
+  r0: -1
+  gamma: 0.99
+  gamma_visit: 0.99
 
   lr:
     id: LinearDecay

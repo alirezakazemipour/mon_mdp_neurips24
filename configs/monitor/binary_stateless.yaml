@@ -1,5 +1,0 @@
-# @package _global_
-
-monitor:
-  id: StatelessBinaryMonitor
-  prob: 0.1

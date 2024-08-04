@@ -1,8 +1,0 @@
-# @package _global_
-
-monitor:
-  id: NeverObsButtonMonitor
-  prob: 1
-
-experiment:
-  testing_episodes: 100

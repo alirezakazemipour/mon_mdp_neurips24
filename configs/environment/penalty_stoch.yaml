@@ -1,8 +1,0 @@
-# @package _global_
-
-environment:
-  id: Gym-Grid/Gridworld-Stochastic-3x3-v0
-
-experiment:
-  training_steps: 50000
-  testing_episodes: 1

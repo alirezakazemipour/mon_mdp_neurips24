@@ -19,8 +19,8 @@ BAD = 11
 BAD_SMALL = 12
 WALL = -3
 
-REWARDS = defaultdict(lambda: 0)
-REWARDS[GOOD] = 1
+REWARDS = defaultdict(lambda: 0.)
+REWARDS[GOOD] = 10
 REWARDS[BAD] = -10
 REWARDS[GOOD_SMALL] = 0.1
 REWARDS[BAD_SMALL] = -0.1
@@ -85,8 +85,8 @@ GRIDS = {
         [UP, EMPTY, EMPTY, EMPTY, EMPTY],
     ],
     "3x5_two_room_quicksand": [
-        [EMPTY, EMPTY, LEFT, EMPTY, GOOD],
-        [EMPTY, EMPTY, QCKSND, EMPTY, EMPTY],
+        [EMPTY, LEFT, GOOD, EMPTY, EMPTY],
+        [EMPTY, QCKSND, EMPTY, EMPTY, EMPTY],
         [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
     ],
     "3x4_corridor": [
@@ -291,7 +291,7 @@ class Gridworld(gym.Env):
         if self.np_random.random() < self.random_action_prob:
             action = self.action_space.sample()
         self.last_action = action
-        if self.grid[self.agent_pos] == QCKSND and self.np_random.random() > 0.1:
+        if self.grid[self.agent_pos] == QCKSND:
             pass  # fail to move in quicksand
         else:
             if (
@@ -583,10 +583,10 @@ class RiverSwim(Gridworld):
         terminated = False  # infinite horizon
         self.last_action = original_action
 
-        reward = -1.0
+        reward = 0
         if state == last and action == RIGHT and original_action == RIGHT:
-            reward += 1.0
+            reward = 10.0
         elif state == first and action == LEFT and original_action == LEFT:
-            reward += 0.01
+            reward = 0.01
 
         return obs, reward, terminated, truncated, info

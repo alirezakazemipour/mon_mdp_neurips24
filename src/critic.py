@@ -64,12 +64,12 @@ class QCritic(Critic):
         self.r.reset()
 
     def update(
-        self,
-        obs_env, obs_mon,
-        act_env, act_mon,
-        rwd_proxy, rwd_mon,
-        term,
-        next_obs_env, next_obs_mon,
+            self,
+            obs_env, obs_mon,
+            act_env, act_mon,
+            rwd_proxy, rwd_mon,
+            term,
+            next_obs_env, next_obs_mon,
     ):  # fmt: skip
         self.update_r(obs_env, act_env, rwd_proxy)
         rwd = self.r(obs_env, act_env) + rwd_mon
@@ -96,28 +96,28 @@ class QTableCritic(QCritic):
     It also keeps counts that are updated by the data collection procedure.
     """
 
-    def __init__(
-        self,
-        n_obs_env: int, n_obs_mon: int,
-        n_act_env: int, n_act_mon: int,
-        q0_max: float,
-        r0_max: float,
-        **kwargs
-    ):  # fmt: skip
+    def __init__(self,
+                 n_obs_env: int,
+                 n_obs_mon: int,
+                 n_act_env: int,
+                 n_act_mon: int,
+                 q0: float,
+                 r0: float,
+                 **kwargs
+                 ):
         QCritic.__init__(self, **kwargs)
         self.act_shape = (n_act_env, n_act_mon)
         self.obs_shape = (n_obs_env, n_obs_mon)
         self.env_shape = (n_obs_env, n_act_env)
         self.mon_shape = (n_obs_mon, n_act_mon)
-        self.q = MSETable(
-            *self.obs_shape,
-            *self.act_shape,
-            init_value_max=q0_max,
-        )
+        self.q = MSETable(*self.obs_shape,
+                          *self.act_shape,
+                          init_value_max=q0,
+                          )
         self.q_target = self.q  # with tabular Q we don't need a different target
         self.r = RunningMeanTable(
             *self.env_shape,
-            init_value_max=r0_max,
+            init_value_max=r0,
         )
         self.reward_count = CountTable(*self.env_shape)  # N(sE,aE) when reward is observed
         self.visit_count = CountTable(*self.obs_shape, *self.act_shape)  # N(s,a)
@@ -135,24 +135,27 @@ class QTableCriticWithVisitReward(QTableCritic):
     Intrinsic reward based on the inverse of the visitation count.
     """
 
-    def update(
-        self,
-        obs_env, obs_mon,
-        act_env, act_mon,
-        rwd_proxy, rwd_mon,
-        term,
-        next_obs_env, next_obs_mon,
-    ):  # fmt: skip
+    def update(self,
+               obs_env,
+               obs_mon,
+               act_env,
+               act_mon,
+               rwd_proxy,
+               rwd_mon,
+               term,
+               next_obs_env,
+               next_obs_mon,
+               ):  # fmt: skip
         n = self.visit_count(obs_env, obs_mon, act_env, act_mon)
         rwd_intrinsic = 1.0 / np.sqrt(n)
         rwd_coeff = 1.0 - self.gamma
         return QCritic.update(self,
-            obs_env, obs_mon,
-            act_env, act_mon,
-            rwd_proxy, rwd_mon + rwd_coeff * rwd_intrinsic,
-            term,
-            next_obs_env, next_obs_mon,
-        )  # fmt: skip
+                              obs_env, obs_mon,
+                              act_env, act_mon,
+                              rwd_proxy, rwd_mon + rwd_coeff * rwd_intrinsic,
+                              term,
+                              next_obs_env, next_obs_mon,
+                              )  # fmt: skip
 
 
 class QTableCriticWithVisitQ(QTableCritic):
@@ -161,24 +164,24 @@ class QTableCriticWithVisitQ(QTableCritic):
     In the code, they are called Q-visit.
     """
 
-    def __init__(
-        self,
-        n_obs_env: int, n_obs_mon: int,
-        n_act_env: int, n_act_mon: int,
-        q0_visit_max: float,
-        gamma_visit: float,
-        lr_visit: DictConfig,
-        **kwargs,
-    ):  # fmt: skip
+    def __init__(self,
+                 n_obs_env: int,
+                 n_obs_mon: int,
+                 n_act_env: int,
+                 n_act_mon: int,
+                 q0_visit: float,
+                 gamma_visit: float,
+                 lr_visit: DictConfig,
+                 **kwargs,
+                 ):
         QTableCritic.__init__(self, n_obs_env, n_obs_mon, n_act_env, n_act_mon, **kwargs)
         self.lr_visit = getattr(parameter, lr_visit.id)(**lr_visit)
         self.gamma_visit = gamma_visit
-        self.q_visit = MSETable(
-            *self.obs_shape,
-            *self.act_shape,
-            n_obs_env * n_obs_mon * n_act_env * n_act_mon,
-            init_value_max=q0_visit_max,
-        )
+        self.q_visit = MSETable(*self.obs_shape,
+                                *self.act_shape,
+                                n_obs_env * n_obs_mon * n_act_env * n_act_mon,
+                                init_value_max=q0_visit,
+                                )
         self.q_visit_target = self.q_visit
         QTableCriticWithVisitQ.reset(self)
 
@@ -188,17 +191,17 @@ class QTableCriticWithVisitQ(QTableCritic):
         QCritic.reset(self)
 
     def update(
-        self,
-        obs_env, obs_mon,
-        act_env, act_mon,
-        rwd_proxy, rwd_mon,
-        term,
-        next_obs_env, next_obs_mon,
+            self,
+            obs_env, obs_mon,
+            act_env, act_mon,
+            rwd_proxy, rwd_mon,
+            term,
+            next_obs_env, next_obs_mon,
     ):  # fmt: skip
         q_visit_next = self.q_visit_target(next_obs_env, next_obs_mon)
-        rwd_visit = np.zeros((q_visit_next.shape[0], q_visit_next.shape[-1])) - 1
+        rwd_visit = np.zeros((q_visit_next.shape[0], q_visit_next.shape[-1]))
         idx = np.ravel_multi_index((obs_env, obs_mon, act_env, act_mon), self.q.shape)
-        rwd_visit[:, idx] = 0
+        rwd_visit[:, idx] = 1
         target = td_target(
             rwd_visit,
             np.logical_or(term[:, None], rwd_visit),
@@ -214,9 +217,9 @@ class QTableCriticWithVisitQ(QTableCritic):
         self.lr_visit.step()
 
         return error.mean(-1) + QCritic.update(self,
-            obs_env, obs_mon,
-            act_env, act_mon,
-            rwd_proxy, rwd_mon,
-            term,
-            next_obs_env, next_obs_mon,
-        )  # fmt: skip
+                                               obs_env, obs_mon,
+                                               act_env, act_mon,
+                                               rwd_proxy, rwd_mon,
+                                               term,
+                                               next_obs_env, next_obs_mon,
+                                               )  # fmt: skip

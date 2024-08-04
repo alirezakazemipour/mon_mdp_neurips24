@@ -1,7 +1,7 @@
 defaults:
   - agent: default
-  - environment: river_swim
-  - monitor: binary_stateless
+  - environment: two_room
+  - monitor: button
   - algorithm: q_visit
   - _self_
   - override hydra/hydra_logging: disabled
@@ -16,7 +16,6 @@ wandb:
   project: explore_benchmark
 
 experiment:
-  testing_points: 250
   datadir: null
   debugdir: null
   rng_seed: 1

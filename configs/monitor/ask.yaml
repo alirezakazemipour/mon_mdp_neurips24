@@ -1,4 +1,5 @@
 # @package _global_
 
 monitor:
-  id: RandomMonitor
+  id: AskMonitor
+  prob: 0.25

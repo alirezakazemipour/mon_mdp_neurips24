@@ -2,17 +2,15 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 
-n_runs = 100
+n_runs = 1
 algos = [
     # "MDP",
-    ("StatelessBinaryMonitor_1.0", "blue", "100%"),
-    # (""
-     # "StatelessBinaryMonitor_0.75", "red", "75%"),
-    # (""
-     # "StatelessBinaryMonitor_0.5", "green", "50%"),
-    # (""
-     # "StatelessBinaryMonitor_0.25", "orange", "25%"),
-    ("StatelessBinaryMonitor_0.1", "brown", "10%")
+    ("ButtonMonitor_1.0", "blue", "100%"),
+    ("ButtonMonitor_0.75", "red", "75%"),
+    ("ButtonMonitor_0.5", "green", "50%"),
+    ("ButtonMonitor_0.25", "orange", "25%"),
+    ("ButtonMonitor_0.1", "brown", "10%"),
+    ("ButtonMonitor_0.01", "magenta", "10%")
 ]
 
 plt.style.use('ggplot')
@@ -37,10 +35,10 @@ for conf in algos:
     algo, color, legend = conf
     runs = []
     for i in range(n_runs):
-        x = np.load(f"data/simone/{algo}/{algo}_{-10}_{1}_{i}.npz")
+        x = np.load(f"data/iGym-Grid/RiverSwim-6-v0/{algo}/{algo.replace('_', '__')}_{i}.npz")
         runs.append(x["test/return"])
-    # print(np.argmin(np.asarray(runs).sum(-1)))
-    # exit()
+        # print(len(x["test/return"]))
+        # exit()
         smoothed = []
         for run in runs:
             val = [run[0]]
@@ -73,11 +71,11 @@ for conf in algos:
     # plt.axhline(.447, linestyle='--', label="cautious", c="magenta")
     # plt.axhline(0.941, linestyle='--', label="cautious", c="olive")
 plt.xlabel("training steps (x100)", weight="bold", fontsize=18)
-plt.axhline(0.941, linestyle="--", color="k", linewidth=3, label="optimal")
+plt.axhline(-149, linestyle="--", color="k", linewidth=3, label="optimal")
 ax.set_ylabel("Discounted Test Return", weight="bold",  fontsize=18)
 plt.title(f"DESF", weight="bold")
 ax.xaxis.set_tick_params(labelsize=20)
 ax.yaxis.set_tick_params(labelsize=20)
-plt.savefig("/Users/alirezakazemipour/Desktop/ask_grid.pdf", format="pdf", bbox_inches="tight")
-# plt.show()
+# plt.savefig("/Users/alirezakazemipour/Desktop/ask_grid.pdf", format="pdf", bbox_inches="tight")
+plt.show()
 

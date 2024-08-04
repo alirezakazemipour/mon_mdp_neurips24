@@ -1,9 +1,0 @@
-# @package _global_
-
-environment:
-  id: Gym-Grid/Gridworld-Penalty-3x3-v0
-
-experiment:
-  training_steps: 50000
-  testing_points: 500
-  testing_episodes: 100
