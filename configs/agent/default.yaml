@@ -2,7 +2,7 @@ critic:
   id: QTableCritic
   q0: -10
   q0_visit: 1
-  r0: -1
+  r0: 0
   gamma: 0.99
   gamma_visit: 0.99
 
