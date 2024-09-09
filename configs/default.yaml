@@ -1,7 +1,7 @@
 defaults:
   - agent: default
-  - environment: oneway
-  - monitor: level
+  - environment: river_swim
+  - monitor: ask
   - algorithm: q_visit
   - _self_
   - override hydra/hydra_logging: disabled
