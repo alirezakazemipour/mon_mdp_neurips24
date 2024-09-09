@@ -21,8 +21,8 @@ plt.rc('figure', titlesize=BIGGER_SIZE)
 plt.title(f"EOP", weight="bold")
 
 n_runs = 100
-monitor = "Ask"
-env = "Gridworld-TwoRoom-Quicksand-3x5-v0"
+monitor = "Button"
+env = "Gridworld-Quicksand-Distract-4x4-v0"
 
 info = {"RiverSwim-6-v0": {"Ask": (199.14, "optimal"),
                            "Button": (192.72, "optimal"),
@@ -33,15 +33,15 @@ info = {"RiverSwim-6-v0": {"Ask": (199.14, "optimal"),
         "Gridworld-Corridor-3x4-v0": {"Ask": (9.409, "optimal"),
                                       "Button": (8.972, "optimal"),
                                       },
-        "Gridworld-Empty-Distract-6x6-v0": {"Ask": (9.411, "cautious"),
+        "Gridworld-Empty-Distract-6x6-v0": {"Ask": (9.044, "cautious"),
                                             "Button": (8.057, "cautious"),
                                             },
         "Gridworld-TwoRoom-Quicksand-3x5-v0": {"Ask": (9.044, "cautious"),
                                                "Button": (8.413, "cautious"),
                                                },
-        # "Gridworld-Quicksand-Distract-4x4-v0": {"Ask": (, "optimal"),
-        #                                         "Button": (, "optimal"),
-        #                                         },
+        "Gridworld-Quicksand-Distract-4x4-v0": {"Ask": (9.135, "optimal"),
+                                                "Button": (8.483, "optimal"),
+                                                },
         }
 
 algos = [
@@ -89,10 +89,13 @@ for conf in algos:
                 )
 plt.axhline(ref, linestyle="--", color="k", linewidth=3, label=f"{opt_caut}")
 ax.set_ylabel("Discounted Test Return", weight="bold",  fontsize=18)
-plt.title(f"DESF", weight="bold")
+plt.title(f"{monitor}", weight="bold")
 ax.xaxis.set_tick_params(labelsize=20)
 ax.yaxis.set_tick_params(labelsize=20)
 plt.xlabel("training steps (x100)", weight="bold", fontsize=18)
+ax.legend(loc='lower right', ncol=2, bbox_to_anchor=(1, 0))
+ax.xaxis.set_tick_params(labelsize=20)
+ax.yaxis.set_tick_params(labelsize=20)
 
 plt.savefig(f"/Users/alirezakazemipour/Desktop/{monitor}_{env}.pdf",
             format="pdf",

@@ -1,7 +1,7 @@
 defaults:
   - agent: default
-  - environment: distract
-  - monitor: button
+  - environment: oneway
+  - monitor: level
   - algorithm: q_visit
   - _self_
   - override hydra/hydra_logging: disabled
