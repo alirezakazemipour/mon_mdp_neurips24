@@ -1,7 +1,7 @@
 defaults:
   - agent: default
-  - environment: river_swim
-  - monitor: ask
+  - environment: two_room
+  - monitor: level
   - algorithm: q_visit
   - _self_
   - override hydra/hydra_logging: disabled

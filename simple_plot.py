@@ -20,27 +20,33 @@ plt.rc('legend', fontsize=17)  # legend fontsize
 plt.rc('figure', titlesize=BIGGER_SIZE)
 plt.title(f"EOP", weight="bold")
 
-n_runs = 100
-monitor = "Button"
+n_runs = 30
+monitor = "Level"
 env = "Gridworld-Quicksand-Distract-4x4-v0"
 
 info = {"RiverSwim-6-v0": {"Ask": (199.14, "optimal"),
                            "Button": (192.72, "optimal"),
+                           "Level": (199.14, "optimal"),
                            },
         "Gridworld-Penalty-3x3-v0": {"Ask": (9.415, "cautious"),
                                      "Button": (8.878, "cautious"),
+                                     "Level": (9.415, "cautious"),
                                      },
         "Gridworld-Corridor-3x4-v0": {"Ask": (9.409, "optimal"),
                                       "Button": (8.972, "optimal"),
+                                      "Level": (9.409, "optimal"),
                                       },
         "Gridworld-Empty-Distract-6x6-v0": {"Ask": (9.044, "cautious"),
                                             "Button": (8.057, "cautious"),
+                                            "Level": (9.044, "optimal")
                                             },
         "Gridworld-TwoRoom-Quicksand-3x5-v0": {"Ask": (9.044, "cautious"),
                                                "Button": (8.413, "cautious"),
+                                               "Level": (9.044, "cautious"),
                                                },
         "Gridworld-Quicksand-Distract-4x4-v0": {"Ask": (9.135, "optimal"),
                                                 "Button": (8.483, "optimal"),
+                                                "Level": (9.135, "optimal"),
                                                 },
         }
 
@@ -53,7 +59,7 @@ algos = [
     (f"{monitor}Monitor_0.01", "magenta", "1%")
 ]
 
-assert n_runs == 100
+assert n_runs == 30
 
 for conf in algos:
     algo, color, legend = conf
@@ -75,20 +81,20 @@ for conf in algos:
     lower_bound = mean_return - 1.96 * std_return / math.sqrt(n_runs)
     upper_bound = mean_return + 1.96 * std_return / math.sqrt(n_runs)
     ax.fill_between(np.arange(len(mean_return)),
-                        lower_bound,
-                        upper_bound,
-                        alpha=0.25,
+                    lower_bound,
+                    upper_bound,
+                    alpha=0.25,
                     color=color
-                        )
+                    )
     ax.plot(np.arange(len(mean_return)),
-                mean_return,
-                alpha=1,
-                linewidth=3,
-                c=color,
-                label=legend
-                )
+            mean_return,
+            alpha=1,
+            linewidth=3,
+            c=color,
+            label=legend
+            )
 plt.axhline(ref, linestyle="--", color="k", linewidth=3, label=f"{opt_caut}")
-ax.set_ylabel("Discounted Test Return", weight="bold",  fontsize=18)
+ax.set_ylabel("Discounted Test Return", weight="bold", fontsize=18)
 plt.title(f"{monitor}", weight="bold")
 ax.xaxis.set_tick_params(labelsize=20)
 ax.yaxis.set_tick_params(labelsize=20)
@@ -102,4 +108,3 @@ plt.savefig(f"/Users/alirezakazemipour/Desktop/{monitor}_{env}.pdf",
             bbox_inches="tight"
             )
 # plt.show()
-
