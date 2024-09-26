@@ -1,7 +1,7 @@
 defaults:
   - agent: default
   - environment: two_room
-  - monitor: level
+  - monitor: n
   - algorithm: q_visit
   - _self_
   - override hydra/hydra_logging: disabled

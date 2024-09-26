@@ -3,3 +3,4 @@
 monitor:
   id: NMonitor
   prob: 0.1
+  n_monitors: 5

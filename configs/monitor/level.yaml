@@ -1,2 +1,6 @@
-id: LevelMonitor
-prob: 0.2
+# @package _global_
+
+monitor:
+  id: LevelMonitor
+  prob: 0.2
+  n_levels: 4
