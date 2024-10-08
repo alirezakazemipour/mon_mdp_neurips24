@@ -67,18 +67,6 @@ def run(cfg: DictConfig) -> None:
         if cfg.agent.critic.q0_min == 1.0:
             cfg.agent.critic.q0_min = 50.0
 
-    # More training steps for Mon-MDPs
-    if cfg.monitor.id in ["NMonitor"]:
-        cfg.experiment.training_steps *= 10
-    elif cfg.monitor.id in ["ButtonMonitor"]:
-        cfg.experiment.training_steps *= 2
-    elif cfg.monitor.id in ["StatelessBinaryMonitor"]:
-        cfg.experiment.training_steps *= 3
-    elif cfg.monitor.id in ["LevelMonitor"]:
-        cfg.experiment.training_steps *= 20
-    elif cfg.monitor.id in ["BatteryMonitor"]:
-        cfg.experiment.training_steps *= 10
-
     # Decay learning rate in stochastic monitors
     if cfg.monitor.id in ["NMonitor"]:
         cfg.agent.critic.lr.min_value = min(0.1, cfg.agent.critic.lr.min_value)

@@ -6,6 +6,7 @@ environment:
 experiment:
   training_steps: 20000
   testing_episodes: 100
+  testing_points: 200
 
 agent:
   critic:

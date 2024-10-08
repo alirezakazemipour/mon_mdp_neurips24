@@ -4,8 +4,9 @@ environment:
   id: Gym-Grid/Gridworld-Quicksand-Distract-4x4-v0
 
 experiment:
-  training_steps: 10000
+  training_steps: 20000
   testing_episodes: 100
+  testing_points: 200
 
 agent:
   critic:
