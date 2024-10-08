@@ -8,5 +8,5 @@ params:
   experiment.datadir: data
   experiment.hide_progress_bar: True
   experiment.rng_seed: range(0, 30)
-  agent: optimistic_init #, pessimistic_init
+  agent: optimistic_init
   algorithm: q_visit

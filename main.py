@@ -5,7 +5,6 @@ from omegaconf import DictConfig, OmegaConf, open_dict
 import os
 import numpy as np
 from pprint import pprint  # noqa: F401
-import git
 
 from src.utils import dict_to_id
 from src.experiment import Experiment
@@ -20,8 +19,7 @@ def run(cfg: DictConfig) -> None:
     # pprint(config)
 
     group = dict_to_id(cfg.environment) + "/" + dict_to_id(cfg.monitor)
-    sha = git.Repo(search_parent_directories=True).head.object.hexsha
-    base_folder = os.path.join(sha, group)
+    base_folder = group
     run_id = "_".join(
         [
             str(cfg.algorithm.id),

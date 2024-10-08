@@ -1,7 +1,7 @@
 defaults:
   - agent: default
-  - environment: large
-  - monitor: full
+  - environment: medium_distract
+  - monitor: binary_stateless
   - algorithm: q_visit
   - _self_
   - override hydra/hydra_logging: disabled
