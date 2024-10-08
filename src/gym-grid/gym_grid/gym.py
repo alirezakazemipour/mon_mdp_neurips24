@@ -66,6 +66,15 @@ def register_envs():
     )
 
     register(
+        id="Gridworld-Stochastic-3x3-v0",
+        entry_point="gym_grid.gridworld:StochasticMiniGrid",
+        max_episode_steps=10,
+        kwargs={
+            "grid": "3x3_stochastic",
+        },
+    )
+
+    register(
         id="Gridworld-Quicksand-4x4-v0",
         entry_point="gym_grid.gridworld:Gridworld",
         max_episode_steps=50,
