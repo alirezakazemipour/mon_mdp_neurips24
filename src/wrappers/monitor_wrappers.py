@@ -393,3 +393,42 @@ class LevelMonitor(Monitor):
                 self.monitor_state = 0  # reset level
 
         return self._monitor_get_state(), proxy_reward, monitor_reward, False
+
+
+class RandomMonitor(Monitor):
+    """
+    This monitor randomly makes rewards unobservable.
+    Each reward has a different probability of being observed, which is fixed
+    when the environment is created.
+    There are no monitor states and actions.
+    The monitor reward is always 0.
+
+    Args:
+        env (gymnasium.Env): the Gymnasium environment.
+    """
+
+    def __init__(self, env, **kwargs):
+        Monitor.__init__(self, env, **kwargs)
+        self.action_space = spaces.Dict({
+            "env": env.action_space,
+            "mon": spaces.Discrete(1),
+        })  # fmt: skip
+        self.observation_space = spaces.Dict({
+            "env": env.observation_space,
+            "mon": spaces.Discrete(1),
+        })  # fmt: skip
+        self.prob = env.np_random.random((env.observation_space.n, env.action_space.n))
+
+    def _monitor_set_state(self, state):
+        return
+
+    def _monitor_get_state(self):
+        return np.array(0)
+
+    def _monitor_step(self, action, env_reward):
+        monitor_reward = 0.0
+        if self.np_random.random() < self.prob[self.unwrapped.get_state(), action["env"]]:
+            proxy_reward = np.nan
+        else:
+            proxy_reward = env_reward
+        return self._monitor_get_state(), proxy_reward, monitor_reward, False
