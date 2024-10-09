@@ -1,4 +1,4 @@
-gymnasium
+gymnasium~=0.28.1
 swig
 box2d
 pprintpp
