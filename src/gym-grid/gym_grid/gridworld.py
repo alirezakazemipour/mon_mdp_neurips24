@@ -277,15 +277,12 @@ class Gridworld(gym.Env):
                 terminated = True
             else:
                 reward = 0
-        if self.reward_noise_std > 0.0:
-            reward += self.np_random.normal() * self.reward_noise_std
-        if reward != 0.0 and self.nonzero_reward_noise_std > 0.0:
-            reward += self.np_random.normal() * self.nonzero_reward_noise_std
 
         self.last_pos = self.agent_pos
         if self.np_random.random() < self.random_action_prob:
             action = self.action_space.sample()
         self.last_action = action
+        
         if self.grid[self.agent_pos] == QCKSND and self.np_random.random() > 0.1:
             pass  # fail to move in quicksand
         else:
