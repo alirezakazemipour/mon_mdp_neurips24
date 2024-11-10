@@ -2,4 +2,4 @@
 
 monitor:
   id: ButtonMonitor
-  prob: 0.25
+  prob: 1

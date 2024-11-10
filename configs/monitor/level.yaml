@@ -2,5 +2,5 @@
 
 monitor:
   id: LevelMonitor
-  prob: 0.2
-  n_levels: 4
+  prob: 1
+  n_levels: 3

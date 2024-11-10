@@ -9,8 +9,8 @@ experiment:
   testing_episodes: 100
 
 monitor:
-  button_cell_id: 8
-  button_flip_act: 1
+  button_cell_id: 0
+  button_flip_act: 0
   forbidden_states:
     - 1
     - 4

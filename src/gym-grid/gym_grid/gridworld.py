@@ -20,7 +20,7 @@ BAD_SMALL = 12
 WALL = -3
 
 REWARDS = defaultdict(lambda: 0.)
-REWARDS[GOOD] = 10
+REWARDS[GOOD] = 1
 REWARDS[BAD] = -10
 REWARDS[GOOD_SMALL] = 0.1
 REWARDS[BAD_SMALL] = -0.1
@@ -585,7 +585,7 @@ class RiverSwim(Gridworld):
 
         reward = 0
         if state == last and action == RIGHT and original_action == RIGHT:
-            reward = 10.0
+            reward = 1
         elif state == first and action == LEFT and original_action == LEFT:
             reward = 0.01
 

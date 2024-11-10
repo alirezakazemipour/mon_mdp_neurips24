@@ -18,6 +18,6 @@ agent:
       min_value: 0.5
 
 monitor:
-  button_cell_id: 15
-  button_flip_act: 1
+  button_cell_id: 0
+  button_flip_act: 0
   forbidden_states:
