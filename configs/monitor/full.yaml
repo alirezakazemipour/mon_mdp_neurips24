@@ -1,0 +1,5 @@
+# @package _global_
+
+monitor:
+  id: FullMonitor
+  prob: 1
