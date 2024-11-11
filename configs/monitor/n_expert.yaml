@@ -1,0 +1,6 @@
+# @package _global_
+
+monitor:
+  id: NExpertMonitor
+  prob: 1
+  n_monitors: 4
