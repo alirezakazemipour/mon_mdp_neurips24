@@ -279,7 +279,7 @@ class Gridworld(gym.Env):
         if self.np_random.random() < self.random_action_prob:
             action = self.action_space.sample()
         self.last_action = action
-        if self.grid[self.agent_pos] == QCKSND:
+        if self.grid[self.agent_pos] == QCKSND and self.np_random.random() > 0.1:
             pass  # fail to move in quicksand
         else:
             if (
