@@ -523,7 +523,7 @@ class RandomMonitor(Monitor):
             "env": env.observation_space,
             "mon": spaces.Discrete(1),
         })  # fmt: skip
-        self.prob = env.np_random.random((env.observation_space.n, env.action_space.n))
+        self.prob = kwargs["prob"]
         self.forbidden_states = kwargs["forbidden_states"] if kwargs["forbidden_states"] is not None else []
 
     def _monitor_set_state(self, state):
