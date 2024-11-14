@@ -4,9 +4,9 @@ environment:
   id: Gym-Grid/Gridworld-TwoRoom-Quicksand-3x5-v0
 
 experiment:
-  training_steps: 20000
+  training_steps: 30000
   testing_episodes: 100
-  testing_points: 200
+  testing_points: 300
 
 agent:
   critic:
