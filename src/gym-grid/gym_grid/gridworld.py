@@ -66,6 +66,14 @@ GRIDS = {
     ],
     "10x10_empty": [[EMPTY for _ in range(10)] for _ in range(10)],
     "6x6_distract": [[EMPTY for _ in range(6)] for _ in range(6)],
+    "6x6_snake": [
+        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY, BAD, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+        [GOOD_SMALL, EMPTY, EMPTY, EMPTY, EMPTY, GOOD],
+    ],
     "4x4_quicksand": [
         [EMPTY, EMPTY, BAD, GOOD],
         [EMPTY, EMPTY, BAD, EMPTY],
