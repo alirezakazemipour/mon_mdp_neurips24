@@ -70,6 +70,7 @@ class Experiment:
             "train/visited_r_sum": [],
             "train/visited_r_std": [],
             "train/beta": [],
+            "train/visit_count": None
         }
 
         pbar = tqdm(total=self._training_steps, disable=self._hide_progress_bar)
@@ -171,6 +172,7 @@ class Experiment:
         self._env_test.close()
         pbar.close()
 
+        data["train/visit_count"] = self._critic.visit_count()
         return data
 
     def test(self):
