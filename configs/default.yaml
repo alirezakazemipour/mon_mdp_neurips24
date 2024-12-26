@@ -1,6 +1,6 @@
 defaults:
   - agent: default
-  - environment: bypass
+  - environment: 6x6_snake
   - monitor: random
   - algorithm: q_visit
   - _self_

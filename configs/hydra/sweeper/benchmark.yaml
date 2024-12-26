@@ -3,8 +3,9 @@
 _target_: hydra._internal.core_plugins.basic_sweeper.BasicSweeper
 max_batch_size: null
 params:
-  environment: bypass
-  monitor: ask, button, n_supporter, level, random_nonzero, full
+  environment: bypass, 6x6_snake
+  monitor: ask, button, n_supporter, level, random, n_expert
   experiment.datadir: data
   experiment.hide_progress_bar: True
   experiment.rng_seed: range(0, 30)
+  monitor.prob: 0.8, 0.2, 0.05

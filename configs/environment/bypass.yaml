@@ -4,9 +4,9 @@ environment:
   id: Gym-Grid/Gridworld-Bypass-3x5-v0
 
 experiment:
-  training_steps: 20000
+  training_steps: 35000
   testing_episodes: 100
-  testing_points: 200
+  testing_points: 350
 
 agent:
   critic:
