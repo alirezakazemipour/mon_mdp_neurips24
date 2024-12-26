@@ -1,6 +1,6 @@
 defaults:
   - agent: default
-  - environment: distract_snake
+  - environment: bypass
   - monitor: random
   - algorithm: q_visit
   - _self_

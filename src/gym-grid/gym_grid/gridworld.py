@@ -92,9 +92,9 @@ GRIDS = {
         [RIGHT, EMPTY, QCKSND, GOOD_SMALL, EMPTY],
         [UP, EMPTY, EMPTY, EMPTY, EMPTY],
     ],
-    "3x5_two_room_quicksand": [
+    "3x5_bypass": [
         [EMPTY, LEFT, GOOD, EMPTY, EMPTY],
-        [EMPTY, QCKSND, EMPTY, EMPTY, EMPTY],
+        [EMPTY, QCKSND, EMPTY, BAD, EMPTY],
         [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
     ],
     "3x4_corridor": [
