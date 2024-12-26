@@ -349,7 +349,7 @@ class NMonitor(Monitor):
 
     def _monitor_step(self, action, env_reward):
         assert (
-            action["mon"] < self.action_space["mon"].n
+                action["mon"] < self.action_space["mon"].n
         ), "illegal monitor action"  # fmt: skip
 
         if action["mon"] == self.monitor_state:
@@ -405,7 +405,7 @@ class LevelMonitor(Monitor):
 
     def _monitor_step(self, action, env_reward):
         assert (
-            action["mon"] < self.action_space["mon"].n
+                action["mon"] < self.action_space["mon"].n
         ), "illegal monitor action"  # fmt: skip
 
         monitor_reward = 0.0
@@ -608,3 +608,43 @@ class ButtonMonitor(Monitor):
             self.render()
 
         return obs, reward, terminated, truncated, env_info
+
+
+class NExpertMonitor(Monitor):
+    def __init__(self, env, monitor_cost=0.2, monitor_bonus=0.001, **kwargs):
+        Monitor.__init__(self, env, **kwargs)
+        self.n_monitors = kwargs["n_monitors"]
+        self.action_space = spaces.Dict({
+            "env": env.action_space,
+            "mon": spaces.Discrete(self.n_monitors + 1),
+        })  # fmt: skip
+        self.observation_space = spaces.Dict({
+            "env": env.observation_space,
+            "mon": spaces.Discrete(self.n_monitors),
+        })  # fmt: skip
+        self.monitor_state = 0
+        self.monitor_cost = monitor_cost
+        self.monitor_bonus = monitor_bonus
+
+    def _monitor_set_state(self, state):
+        self.monitor_state = state
+
+    def _monitor_get_state(self):
+        return np.array(self.monitor_state)
+
+    def _monitor_step(self, action, env_reward):
+        assert (action["mon"] < self.action_space["mon"].n), "illegal monitor action"
+
+        if action["mon"] == self.monitor_state:
+            proxy_reward = env_reward
+            monitor_reward = -self.monitor_cost
+        else:
+            proxy_reward = np.nan
+            monitor_reward = -self.monitor_bonus
+
+        if action["mon"] == self.n_monitors:
+            proxy_reward = np.nan
+            monitor_reward = 0
+
+        self.monitor_state = self.observation_space["mon"].sample()
+        return self._monitor_get_state(), proxy_reward, monitor_reward, False
