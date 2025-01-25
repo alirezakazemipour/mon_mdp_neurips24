@@ -6,21 +6,22 @@ from tqdm import tqdm
 from src.actor import Actor
 from src.critic import Critic
 from src.utils import set_rng_seed, cantor_pairing
+from src.wrappers.monitor_wrappers import ButtonMonitor as Button
 
 
 class Experiment:
     def __init__(
-        self,
-        env: gym.Env,
-        env_test: gym.Env,
-        actor: Actor,
-        critic: Critic,
-        training_steps: int,
-        testing_episodes: int,
-        testing_points: int,
-        rng_seed: int = 1,
-        hide_progress_bar: bool = True,
-        **kwargs,
+            self,
+            env: gym.Env,
+            env_test: gym.Env,
+            actor: Actor,
+            critic: Critic,
+            training_steps: int,
+            testing_episodes: int,
+            testing_points: int,
+            rng_seed: int = 1,
+            hide_progress_bar: bool = True,
+            **kwargs,
     ):
         """
         Args:
@@ -70,7 +71,10 @@ class Experiment:
             "train/visited_r_sum": [],
             "train/visited_r_std": [],
             "train/beta": [],
-            "train/visit_count": None
+            "train/visit_count": None,
+            "train/goal_cnt_hist": [],
+            "train/button_cnt_hist": [],
+            "train/unobsrv_cnt_hist": []
         }
 
         pbar = tqdm(total=self._training_steps, disable=self._hide_progress_bar)
@@ -95,6 +99,13 @@ class Experiment:
             visited_r = np.count_nonzero(reward_count)
             visited_r_sum = reward_count.sum()
             visited_r_std = reward_count.std()
+
+            if self._env.spec.id == gym.envs.spec("Gym-Grid/Gridworld-Snake-6x6-v0").id and isinstance(self._env,
+                                                                                                       Button):
+                goal_cnt = visit_count[-1, :, 4, :].sum()
+                button_cnt = visit_count[31, :, 1, :].sum()
+                unobsrv_cnt = visit_count.sum((1, -1))[[2, 8, 20, 26, 32]].mean()
+
             train_dict = {
                 "train/return": last_ep_return,
                 "train/loss": last_ep_loss,
@@ -104,6 +115,9 @@ class Experiment:
                 "train/visited_r_sum": visited_r_sum,
                 "train/visited_r_std": visited_r_std,
                 "train/beta": self._actor.beta,
+                "train/goal_cnt_hist": goal_cnt,
+                "train/button_cnt_hist": button_cnt,
+                "train/unobsrv_cnt_hist": unobsrv_cnt
             }
             wandb.log(train_dict, step=tot_steps, commit=False)
             for k, v in train_dict.items():
@@ -155,7 +169,7 @@ class Experiment:
                 )
                 self._actor.update()
 
-                ep_return += (self._gamma**ep_steps) * (rwd["env"] + rwd["mon"])
+                ep_return += (self._gamma ** ep_steps) * (rwd["env"] + rwd["mon"])
                 ep_loss += step_loss.mean()
                 ep_steps += 1
                 obs = next_obs
@@ -189,7 +203,7 @@ class Experiment:
                 act = self._actor(obs["env"], obs["mon"], ep_generator)
                 act = {"env": act[0], "mon": act[1]}
                 next_obs, rwd, term, trunc, info = self._env_test.step(act)
-                ep_return[ep] += (self._gamma**ep_steps) * (rwd["env"] + rwd["mon"])
+                ep_return[ep] += (self._gamma ** ep_steps) * (rwd["env"] + rwd["mon"])
                 if term or trunc:
                     break
                 obs = next_obs

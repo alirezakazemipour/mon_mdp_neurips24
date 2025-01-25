@@ -1,7 +1,7 @@
 defaults:
   - agent: default
   - environment: 6x6_snake
-  - monitor: random
+  - monitor: button
   - algorithm: q_visit
   - _self_
   - override hydra/hydra_logging: disabled
