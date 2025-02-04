@@ -72,9 +72,12 @@ class Experiment:
             "train/visited_r_std": [],
             "train/beta": [],
             "train/visit_count": None,
-            "train/goal_cnt_hist": [],
-            "train/button_cnt_hist": [],
-            "train/unobsrv_cnt_hist": []
+            "test/goal_cnt_hist": [],
+            "test/button_on_cnt_hist": [],
+            "test/button_off_cnt_hist": [],
+            "test/unobsrv_cnt_hist": [],
+            "test/snake_cnt_hist": [],
+            "test/gold_bar_cnt_hist": []
         }
 
         pbar = tqdm(total=self._training_steps, disable=self._hide_progress_bar)
@@ -85,7 +88,15 @@ class Experiment:
 
         def log_and_print():
             # Log greedy policy evaluation
-            test_return = self.test()
+            (test_return,
+             goal_cnt,
+             button_off_cnt,
+             button_on_cnt,
+             unobsrv_cnt,
+             snake_cnt,
+             gold_bar_cnt
+             ) = self.test()
+
             test_dict = {"test/return": test_return.mean()}
             wandb.log(test_dict, step=tot_steps, commit=False)
             for k, v in test_dict.items():
@@ -100,11 +111,8 @@ class Experiment:
             visited_r_sum = reward_count.sum()
             visited_r_std = reward_count.std()
 
-            if self._env.spec.id == gym.envs.spec("Gym-Grid/Gridworld-Snake-6x6-v0").id and isinstance(self._env,
-                                                                                                       Button):
-                goal_cnt = visit_count[-1, :, 4, :].sum()
-                button_cnt = visit_count[31, :, 1, :].sum()
-                unobsrv_cnt = visit_count.sum((1, -1))[[2, 8, 20, 26, 32]].mean()
+            # if self._env.spec.id == gym.envs.spec("Gym-Grid/Gridworld-Snake-6x6-v0").id and isinstance(self._env,
+            #                                                                                            Button):
 
             train_dict = {
                 "train/return": last_ep_return,
@@ -115,9 +123,12 @@ class Experiment:
                 "train/visited_r_sum": visited_r_sum,
                 "train/visited_r_std": visited_r_std,
                 "train/beta": self._actor.beta,
-                "train/goal_cnt_hist": goal_cnt,
-                "train/button_cnt_hist": button_cnt,
-                "train/unobsrv_cnt_hist": unobsrv_cnt
+                "test/goal_cnt_hist": goal_cnt,
+                "test/button_on_cnt_hist": button_on_cnt,
+                "test/button_off_cnt_hist": button_off_cnt,
+                "test/unobsrv_cnt_hist": unobsrv_cnt,
+                "test/snake_cnt_hist": snake_cnt,
+                "test/gold_bar_cnt_hist": gold_bar_cnt
             }
             wandb.log(train_dict, step=tot_steps, commit=False)
             for k, v in train_dict.items():
@@ -146,6 +157,8 @@ class Experiment:
             tot_episodes += 1
 
             while True:
+                if tot_steps == 5000:
+                    vv = 10
                 if tot_steps % self._log_frequency == 0:
                     log_and_print()
 
@@ -194,6 +207,13 @@ class Experiment:
         self._critic.eval()
         ep_return = np.zeros((self._testing_episodes))
 
+        goal_cnt = np.zeros(self._testing_episodes)
+        button_off_cnt = np.zeros(self._testing_episodes)
+        button_on_cnt = np.zeros(self._testing_episodes)
+        unobsrv_cnt = np.zeros(self._testing_episodes)
+        snake_cnt = np.zeros(self._testing_episodes)
+        gold_bar_cnt = np.zeros(self._testing_episodes)
+
         for ep in range(self._testing_episodes):
             ep_seed = cantor_pairing(self._rng_seed, ep)
             ep_generator = np.random.default_rng(seed=ep_seed)
@@ -202,6 +222,20 @@ class Experiment:
             while True:
                 act = self._actor(obs["env"], obs["mon"], ep_generator)
                 act = {"env": act[0], "mon": act[1]}
+
+                if obs["env"] == 35 and act["env"] == 4:
+                    goal_cnt[ep] += 1
+                elif obs["env"] in [2, 8, 20, 26, 32]:
+                    unobsrv_cnt[ep] += 1
+                elif obs["env"] == 10:
+                    snake_cnt[ep] += 1
+                elif obs["env"] == 30 and act["env"] == 4:
+                    gold_bar_cnt[ep] += 1
+                elif obs["env"] == 31 and obs["mon"] == 0 and act["env"] == 1 and act["mon"] == 0:
+                    button_off_cnt[ep] += 1
+                elif obs["env"] == 31 and obs["mon"] == 1 and act["env"] == 1 and act["mon"] == 0:
+                    button_on_cnt[ep] += 1
+
                 next_obs, rwd, term, trunc, info = self._env_test.step(act)
                 ep_return[ep] += (self._gamma ** ep_steps) * (rwd["env"] + rwd["mon"])
                 if term or trunc:
@@ -211,4 +245,11 @@ class Experiment:
 
         self._actor.train()
         self._critic.train()
-        return ep_return
+        return (ep_return,
+                goal_cnt.mean(),
+                button_off_cnt.mean(),
+                button_on_cnt.mean(),
+                unobsrv_cnt.mean(),
+                snake_cnt.mean(),
+                gold_bar_cnt.mean()
+                )

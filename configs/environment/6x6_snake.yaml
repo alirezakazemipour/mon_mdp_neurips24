@@ -4,9 +4,9 @@ environment:
   id: Gym-Grid/Gridworld-Snake-6x6-v0
 
 experiment:
-  training_steps: 300000
+  training_steps: 30000
   testing_episodes: 100
-  testing_points: 3000
+  testing_points: 300
 
 monitor:
   button_cell_id: 31
