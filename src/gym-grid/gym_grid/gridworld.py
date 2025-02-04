@@ -39,7 +39,7 @@ GRAY = (100, 100, 100)
 
 GRIDS = {
     "river_swim_6": [[EMPTY for _ in range(6)]],
-    "20_straight": [[EMPTY for _ in range(20)]],
+    "corridor": [[EMPTY for _ in range(20)]],
     "2x2_empty": [
         [EMPTY, EMPTY],
         [EMPTY, GOOD],
@@ -49,7 +49,7 @@ GRIDS = {
         [EMPTY, EMPTY, EMPTY],
         [EMPTY, EMPTY, GOOD],
     ],
-    "3x3_empty_loop": [
+    "loop": [
         [EMPTY, LEFT, EMPTY],
         [EMPTY, RIGHT, UP],
         [EMPTY, EMPTY, GOOD],
@@ -59,15 +59,14 @@ GRIDS = {
         [EMPTY, BAD, EMPTY],
         [EMPTY, EMPTY, EMPTY],
     ],
-    "10x10_empty": [[EMPTY for _ in range(10)] for _ in range(10)],
-    "6x6_distract": [[EMPTY for _ in range(6)] for _ in range(6)],
+    "empty": [[EMPTY for _ in range(6)] for _ in range(6)],
     "4x4_quicksand": [
         [EMPTY, EMPTY, BAD, GOOD],
         [EMPTY, EMPTY, BAD, EMPTY],
         [EMPTY, QCKSND, EMPTY, EMPTY],
         [EMPTY, EMPTY, EMPTY, EMPTY],
     ],
-    "4x4_quicksand_distract": [
+    "hazard": [
         [EMPTY, GOOD_SMALL, BAD, GOOD],
         [EMPTY, BAD, EMPTY, EMPTY],
         [EMPTY, QCKSND, GOOD_SMALL, EMPTY],
@@ -79,17 +78,17 @@ GRIDS = {
         [RIGHT, EMPTY, QCKSND, GOOD_SMALL, EMPTY],
         [UP, EMPTY, EMPTY, EMPTY, EMPTY],
     ],
-    "3x5_two_room_quicksand": [
+    "two_room_3x5": [
         [EMPTY, EMPTY, LEFT, EMPTY, GOOD],
         [EMPTY, EMPTY, QCKSND, EMPTY, EMPTY],
         [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
     ],
-    "3x4_corridor": [
+    "one_way": [
         [EMPTY, LEFT, LEFT, LEFT],
         [GOOD_SMALL, BAD_SMALL, BAD_SMALL, GOOD],
         [EMPTY, LEFT, LEFT, LEFT],
     ],
-    "2x11_two_room_distract": [
+    "two_room_2x11": [
         [GOOD_SMALL, EMPTY, EMPTY, EMPTY, RIGHT, DOWN, LEFT, EMPTY, EMPTY, EMPTY, GOOD],
         [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
     ],
@@ -102,10 +101,9 @@ GRIDS = {
     ],
 }
 
-GRIDS["10x10_empty"][-1][-1] = GOOD
-GRIDS["20_straight"][-1][-1] = GOOD
-GRIDS["6x6_distract"][-1][-1] = GOOD
-GRIDS["6x6_distract"][-1][0] = GOOD_SMALL
+GRIDS["corridor"][-1][-1] = GOOD
+GRIDS["empty"][-1][-1] = GOOD
+GRIDS["empty"][-1][0] = GOOD_SMALL
 
 GRIDS["river_swim_6"][-1][-1] = GOOD
 GRIDS["river_swim_6"][0][0] = GOOD_SMALL

@@ -1,9 +1,9 @@
 # @package _global_
 
 environment:
-  id: Gym-Grid/Gridworld-Corridor
+  id: Gym-Grid/Gridworld-TwoRoom-2x11
 
 experiment:
-  training_steps: 20000
+  training_steps: 2000
   testing_episodes: 100
   testing_points: 200

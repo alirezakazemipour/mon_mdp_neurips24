@@ -1,6 +1,6 @@
 defaults:
   - agent: default
-  - environment: quicksand_distract
+  - environment: hazard
   - monitor: binary_stateless
   - algorithm: q_visit
   - _self_

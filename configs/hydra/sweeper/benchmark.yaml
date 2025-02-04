@@ -3,8 +3,8 @@
 _target_: hydra._internal.core_plugins.basic_sweeper.BasicSweeper
 max_batch_size: null
 params:
-  environment: river_swim
-  monitor: n_expert
+  environment: loop, two_room_3x5, two_room_2x11, corridor
+  monitor: full, random_nonzero, binary_stateless, button, n, level
   experiment.datadir: data
   experiment.hide_progress_bar: True
   experiment.rng_seed: range(0, 30)
