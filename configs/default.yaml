@@ -1,7 +1,7 @@
 defaults:
   - agent: default
-  - environment: quicksand_distract
-  - monitor: n
+  - environment: two_room_distract_middle
+  - monitor: button
   - algorithm: q_visit
   - _self_
   - override hydra/hydra_logging: disabled

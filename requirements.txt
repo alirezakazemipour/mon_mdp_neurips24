@@ -1,5 +1,4 @@
-gymnasium[box2d]~=0.28.1
-box2d-py
+gymnasium~=0.28.1
 pprintpp
 wandb
 numpy
@@ -8,7 +7,6 @@ submitit
 hydra-core
 hydra-joblib-launcher
 hydra-submitit-launcher
-pickle
 matplotlib
 seaborn
 gitpython
