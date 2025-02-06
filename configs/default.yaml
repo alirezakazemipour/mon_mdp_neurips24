@@ -1,7 +1,7 @@
 defaults:
   - agent: default
-  - environment: hazard
-  - monitor: binary_stateless
+  - environment: two_room_2x11
+  - monitor: button
   - algorithm: q_visit
   - _self_
   - override hydra/hydra_logging: disabled
