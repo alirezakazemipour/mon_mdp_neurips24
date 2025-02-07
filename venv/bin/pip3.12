@@ -1,4 +1,4 @@
-#!/Users/alirezakazemipour/github/mon_mdp_neurips24/venv/bin/python3.12
+#!/Users/alirezakazemipour/github/mon_mdp_neurips24/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
