@@ -1,0 +1,12 @@
+# @package _global_
+# @package hydra.sweeper
+_target_: hydra._internal.core_plugins.basic_sweeper.BasicSweeper
+max_batch_size: null
+params:
+  environment: loop, two_room_3x5, two_room_2x11, corridor, empty, hazard, one_way, river_swim
+  monitor: full, random_nonzero, ask, button, n, level
+  experiment.datadir: ../Mon-MBIE-EB/data
+  experiment.hide_progress_bar: True
+  experiment.rng_seed: range(0, 30)
+  agent: optimistic_init
+  algorithm: q_visit

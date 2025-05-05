@@ -35,7 +35,11 @@ def run(cfg: DictConfig) -> None:
     )
 
     if cfg.experiment.datadir is not None:
-        filepath = os.path.join(cfg.experiment.datadir, base_folder)
+        filepath = os.path.join(cfg.experiment.datadir,
+                                "DEE",
+                                os.path.split(cfg.environment.id)[-1],
+                                cfg.monitor.id
+                                )
         os.makedirs(filepath, exist_ok=True)
         filepath = os.path.join(filepath, run_id)
         if os.path.isfile(filepath + ".npz"):

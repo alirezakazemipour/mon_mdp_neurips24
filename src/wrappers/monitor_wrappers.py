@@ -105,7 +105,7 @@ class Monitor(gymnasium.Wrapper):
         return obs, reward, terminated, truncated, env_info
 
 
-class FullMonitor(Monitor):
+class Full(Monitor):
     """
     This monitor always shows the true reward, regardless of its state and action.
     The monitor reward is always 0.
@@ -136,7 +136,7 @@ class FullMonitor(Monitor):
         return self._monitor_get_state(), env_reward, 0.0, False
 
 
-class RandomNonZeroMonitor(Monitor):
+class RandomNonZero(Monitor):
     """
     This monitor randomly makes non-zero rewards unobservable.
     There are no monitor states and actions.
@@ -174,7 +174,7 @@ class RandomNonZeroMonitor(Monitor):
         return self._monitor_get_state(), proxy_reward, monitor_reward, False
 
 
-class RandomMonitor(Monitor):
+class Random(Monitor):
     """
     This monitor randomly makes rewards unobservable.
     Each reward has a different probability of being observed, which is fixed
@@ -213,7 +213,7 @@ class RandomMonitor(Monitor):
         return self._monitor_get_state(), proxy_reward, monitor_reward, False
 
 
-class StatefulBinaryMonitor(Monitor):
+class StatefulBinary(Monitor):
     """
     Simple monitor where the action is "turn on monitor" / "do nothing".
     The monitor state is also binary ("monitor on" / "monitor off").
@@ -269,7 +269,7 @@ class StatefulBinaryMonitor(Monitor):
         return self._monitor_get_state(), proxy_reward, monitor_reward, False
 
 
-class StatelessBinaryMonitor(Monitor):
+class Ask(Monitor):
     """
     Simple monitor where the action is "turn on monitor" / "do nothing".
     The monitor is always off. The reward is seen only when the agent asks for it.
@@ -308,7 +308,7 @@ class StatelessBinaryMonitor(Monitor):
         return self._monitor_get_state(), proxy_reward, monitor_reward, False
 
 
-class NMonitor(Monitor):
+class N(Monitor):
     """
     There are N monitors. At every time step, a random monitor is on.
     If the agent's action matches the monitor state, the agent observes the
@@ -364,7 +364,7 @@ class NMonitor(Monitor):
         return self._monitor_get_state(), proxy_reward, monitor_reward, False
 
 
-class LevelMonitor(Monitor):
+class Level(Monitor):
     """
     The monitor has N levels, from 0 to N - 1.
     The initial level is random, and it increases if the agent's action matches
@@ -428,7 +428,7 @@ class LevelMonitor(Monitor):
         return self._monitor_get_state(), proxy_reward, monitor_reward, False
 
 
-class LimitedTimeMonitor(Monitor):
+class LimitedTime(Monitor):
     """
     The monitor is on at the beginning of the episode and the agent sees
     rewards for free.
@@ -479,7 +479,7 @@ class LimitedTimeMonitor(Monitor):
         return self._monitor_get_state(), proxy_reward, monitor_reward, False
 
 
-class BatteryMonitor(Monitor):
+class Battery(Monitor):
     """
     The monitor has a battery that is consumed whenever it is on.
     The state of the monitor is the battery level.
@@ -535,7 +535,7 @@ class BatteryMonitor(Monitor):
         return self._monitor_get_state(), proxy_reward, monitor_reward, monitor_terminated
 
 
-class ButtonMonitor(Monitor):
+class Button(Monitor):
     """
     Monitor for Gridworlds.
     The monitor is turned on/off by doing LEFT (environment action) where a button is.
@@ -610,7 +610,7 @@ class ButtonMonitor(Monitor):
         return obs, reward, terminated, truncated, env_info
 
 
-class NExpertMonitor(Monitor):
+class NExpert(Monitor):
     def __init__(self, env, monitor_cost=0.2, monitor_bonus=0.001, **kwargs):
         Monitor.__init__(self, env, **kwargs)
         self.n_monitors = kwargs["n_monitors"]
