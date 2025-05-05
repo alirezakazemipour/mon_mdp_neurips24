@@ -28,23 +28,16 @@ def run(cfg: DictConfig) -> None:
     else:
         prob = ""
     group = dict_to_id(cfg.environment) + "/" + str(cfg.monitor.id).replace('Monitor', '') + prob
-    base_folder = group
-    run_id = "_".join(
-        [
-            str(cfg.monitor.id),
-            prob,
-            str(cfg.experiment.rng_seed),
-        ]
-    )
 
     if cfg.experiment.datadir is not None:
-        filepath = os.path.join(cfg.experiment.datadir, base_folder)
+        filepath = os.path.join(cfg.experiment.datadir,
+                                "DEE",
+                                os.path.split(cfg.environment.id)[-1],
+                                cfg.monitor.id + "_" + str(cfg.monitor.prob)
+                                )
         os.makedirs(filepath, exist_ok=True)
-        savepath = os.path.join(filepath, "configs.pkl")
-        if not os.path.isfile(savepath):
-            with open(savepath, 'wb') as f:
-                pickle.dump(cfg, f)
-        filepath = os.path.join(filepath, run_id)
+        seed = str(cfg.experiment.rng_seed)
+        filepath = os.path.join(filepath, f"data_{seed}")
         if os.path.isfile(filepath + ".npz"):
             print("   [RUN ALREADY DONE]")
             return
@@ -80,16 +73,7 @@ def run(cfg: DictConfig) -> None:
     data = experiment.train()
 
     if cfg.experiment.datadir is not None:
-        np.savez(filepath, **data)
-
-    if cfg.experiment.debugdir is not None:
-        from plot_gridworld_agent import plot_agent
-
-        filepath = os.path.join(cfg.experiment.debugdir, base_folder)
-        os.makedirs(filepath, exist_ok=True)
-        filepath = os.path.join(filepath, run_id)
-        os.makedirs(filepath, exist_ok=True)
-        plot_agent(actor, critic, filepath)
+        np.savez(filepath + ".npz", **data)
 
     wandb.finish()
 

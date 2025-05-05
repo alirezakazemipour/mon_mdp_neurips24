@@ -105,7 +105,7 @@ class Monitor(gymnasium.Wrapper):
         return obs, reward, terminated, truncated, env_info
 
 
-class FullMonitor(Monitor):
+class Full(Monitor):
     """
     This monitor always shows the true reward, regardless of its state and action.
     The monitor reward is always 0.
@@ -136,7 +136,7 @@ class FullMonitor(Monitor):
         return self._monitor_get_state(), env_reward, 0.0, False
 
 
-class AskMonitor(Monitor):
+class Ask(Monitor):
     """
     Simple monitor where the action is "turn on monitor" / "do nothing".
     The monitor is always off. The reward is seen only when the agent asks for it.
@@ -183,7 +183,7 @@ class AskMonitor(Monitor):
         return self._monitor_get_state(), proxy_reward, monitor_reward, False
 
 
-class ButtonMonitor(Monitor):
+class Button(Monitor):
     """
     Monitor for Gridworlds.
     The monitor is turned on/off by doing LEFT (environment action) where a button is.
@@ -264,7 +264,7 @@ class ButtonMonitor(Monitor):
         return obs, reward, terminated, truncated, env_info
 
 
-class NSupporterMonitor(Monitor):
+class NSupporter(Monitor):
     """
     There are N monitors. At every time step, a random monitor is on.
     If the agent's action matches the monitor state, the agent observes the
@@ -326,7 +326,7 @@ class NSupporterMonitor(Monitor):
         return self._monitor_get_state(), proxy_reward, monitor_reward, False
 
 
-class NExpertMonitor(Monitor):
+class NExpert(Monitor):
     """
     There are N monitors. At every time step, a random monitor is on.
     If the agent's action matches the monitor state, the agent observes the
@@ -392,7 +392,7 @@ class NExpertMonitor(Monitor):
         return self._monitor_get_state(), proxy_reward, monitor_reward, False
 
 
-class LevelMonitor(Monitor):
+class Level(Monitor):
     """
     The monitor has N levels, from 0 to N - 1.
     The initial level is random, and it increases if the agent's action matches
@@ -461,7 +461,7 @@ class LevelMonitor(Monitor):
         return self._monitor_get_state(), proxy_reward, monitor_reward, False
 
 
-class RandomNonZeroMonitor(Monitor):
+class RandomNonZero(Monitor):
     """
     This monitor randomly makes non-zero rewards unobservable.
     There are no monitor states and actions.
@@ -501,7 +501,7 @@ class RandomNonZeroMonitor(Monitor):
         return self._monitor_get_state(), proxy_reward, monitor_reward, False
 
 
-class RandomMonitor(Monitor):
+class Random(Monitor):
     """
     This monitor randomly makes rewards unobservable.
     Each reward has a different probability of being observed, which is fixed
