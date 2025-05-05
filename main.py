@@ -20,19 +20,6 @@ def run(cfg: DictConfig) -> None:
 
     group = dict_to_id(cfg.environment) + "/" + dict_to_id(cfg.monitor)
     base_folder = group
-    run_id = "_".join(
-        [
-            str(cfg.algorithm.id),
-            str(cfg.agent.critic.q0_min),
-            str(cfg.agent.critic.q0_max),
-            str(cfg.agent.critic.q0_visit_min),
-            str(cfg.agent.critic.q0_visit_max),
-            str(cfg.agent.actor.eps.init_value),
-            str(cfg.agent.actor.eps.min_value),
-            str(cfg.agent.actor.beta_bar),
-            str(cfg.experiment.rng_seed),
-        ]
-    )
 
     if cfg.experiment.datadir is not None:
         filepath = os.path.join(cfg.experiment.datadir,
@@ -41,7 +28,8 @@ def run(cfg: DictConfig) -> None:
                                 cfg.monitor.id
                                 )
         os.makedirs(filepath, exist_ok=True)
-        filepath = os.path.join(filepath, run_id)
+        seed = str(cfg.experiment.rng_seed)
+        filepath = os.path.join(filepath, f"data_{seed}")
         if os.path.isfile(filepath + ".npz"):
             print("   [RUN ALREADY DONE]")
             return
@@ -94,16 +82,7 @@ def run(cfg: DictConfig) -> None:
     data = experiment.train()
 
     if cfg.experiment.datadir is not None:
-        np.savez(filepath, **data)
-
-    if cfg.experiment.debugdir is not None:
-        from plot_gridworld_agent import plot_agent
-
-        filepath = os.path.join(cfg.experiment.debugdir, base_folder)
-        os.makedirs(filepath, exist_ok=True)
-        filepath = os.path.join(filepath, run_id)
-        os.makedirs(filepath, exist_ok=True)
-        plot_agent(actor, critic, filepath)
+        np.savez(filepath + ".npz", **data)
 
     wandb.finish()
 
