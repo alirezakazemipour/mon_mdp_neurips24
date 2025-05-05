@@ -1,12 +1,12 @@
 # @package _global_
 
 environment:
-  id: Gym-Grid/Gridworld-Empty-Bottleneck
+  id: Gym-Grid/Gridworld-Bottleneck
 
 experiment:
-  training_steps: 30000
+  training_steps: 35000
   testing_episodes: 100
-  testing_points: 300
+  testing_points: 350
 
 monitor:
   button_cell_id: 31

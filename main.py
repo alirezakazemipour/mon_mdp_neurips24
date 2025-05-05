@@ -27,7 +27,7 @@ def run(cfg: DictConfig) -> None:
         prob = "_" + str(cfg.monitor.prob)
     else:
         prob = ""
-    group = dict_to_id(cfg.environment) + "/" + str(cfg.monitor.id) + prob
+    group = dict_to_id(cfg.environment) + "/" + str(cfg.monitor.id).replace('Monitor', '') + prob
     base_folder = group
     run_id = "_".join(
         [
