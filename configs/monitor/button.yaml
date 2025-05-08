@@ -1,5 +1,5 @@
 # @package _global_
 
 monitor:
-  id: ButtonMonitor
+  id: Button
   prob: 1

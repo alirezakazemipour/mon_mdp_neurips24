@@ -1,6 +1,6 @@
 defaults:
   - agent: default
-  - environment: bypass
+  - environment: bottleneck
   - monitor: button
   - algorithm: q_visit
   - _self_

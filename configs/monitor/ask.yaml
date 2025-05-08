@@ -1,5 +1,5 @@
 # @package _global_
 
 monitor:
-  id: AskMonitor
+  id: Ask
   prob: 1

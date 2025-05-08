@@ -6,7 +6,6 @@ from tqdm import tqdm
 from src.actor import Actor
 from src.critic import Critic
 from src.utils import set_rng_seed, cantor_pairing
-from src.wrappers.monitor_wrappers import ButtonMonitor as Button
 
 
 class Experiment:

@@ -1,6 +1,6 @@
 # @package _global_
 
 monitor:
-  id: NSupporterMonitor
+  id: NSupporter
   prob: 1
   n_monitors: 4
