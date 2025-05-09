@@ -89,11 +89,7 @@ class Experiment:
             # Log greedy policy evaluation
             (test_return,
              goal_cnt,
-             button_off_cnt,
-             button_on_cnt,
              unobsrv_cnt,
-             snake_cnt,
-             gold_bar_cnt
              ) = self.test()
 
             test_dict = {"test/return": test_return.mean()}
@@ -123,11 +119,7 @@ class Experiment:
                 "train/visited_r_std": visited_r_std,
                 "train/beta": self._actor.beta,
                 "test/goal_cnt_hist": goal_cnt,
-                "test/button_on_cnt_hist": button_on_cnt,
-                "test/button_off_cnt_hist": button_off_cnt,
-                "test/unobsrv_cnt_hist": unobsrv_cnt,
-                "test/snake_cnt_hist": snake_cnt,
-                "test/gold_bar_cnt_hist": gold_bar_cnt
+                "test/unobsrv_cnt_hist": unobsrv_cnt
             }
             wandb.log(train_dict, step=tot_steps, commit=False)
             for k, v in train_dict.items():
@@ -207,11 +199,7 @@ class Experiment:
         ep_return = np.zeros((self._testing_episodes))
 
         goal_cnt = np.zeros(self._testing_episodes)
-        button_off_cnt = np.zeros(self._testing_episodes)
-        button_on_cnt = np.zeros(self._testing_episodes)
         unobsrv_cnt = np.zeros(self._testing_episodes)
-        snake_cnt = np.zeros(self._testing_episodes)
-        gold_bar_cnt = np.zeros(self._testing_episodes)
 
         for ep in range(self._testing_episodes):
             ep_seed = cantor_pairing(self._rng_seed, ep)
@@ -226,14 +214,6 @@ class Experiment:
                     goal_cnt[ep] += 1
                 elif obs["env"] in [2, 8, 20, 26, 32]:
                     unobsrv_cnt[ep] += 1
-                elif obs["env"] == 10:
-                    snake_cnt[ep] += 1
-                elif obs["env"] == 30 and act["env"] == 4:
-                    gold_bar_cnt[ep] += 1
-                elif obs["env"] == 31 and obs["mon"] == 0 and act["env"] == 1 and act["mon"] == 0:
-                    button_off_cnt[ep] += 1
-                elif obs["env"] == 31 and obs["mon"] == 1 and act["env"] == 1 and act["mon"] == 0:
-                    button_on_cnt[ep] += 1
 
                 next_obs, rwd, term, trunc, info = self._env_test.step(act)
                 ep_return[ep] += (self._gamma ** ep_steps) * (rwd["env"] + rwd["mon"])
@@ -246,9 +226,5 @@ class Experiment:
         self._critic.train()
         return (ep_return,
                 goal_cnt.mean(),
-                button_off_cnt.mean(),
-                button_on_cnt.mean(),
                 unobsrv_cnt.mean(),
-                snake_cnt.mean(),
-                gold_bar_cnt.mean()
                 )

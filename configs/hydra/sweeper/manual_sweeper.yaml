@@ -5,6 +5,7 @@ max_batch_size: null
 params:
   environment: bottleneck
   monitor: random, ask, button, n_supporter, n_expert, level
+  agent: default
   experiment.datadir: ../Mon-MBIE-EB/data
   experiment.hide_progress_bar: True
   experiment.rng_seed: range(0, 30)
