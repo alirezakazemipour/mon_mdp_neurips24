@@ -45,20 +45,20 @@ def run(cfg: DictConfig) -> None:
         **cfg.wandb,
     )
 
-    if cfg.environment.id in ["Gym-Grid/Gridworld-TwoRoom-Distract-Middle-2x11-v0"]:
-        if cfg.monitor.id in ["ButtonMonitor"]:
+    if cfg.environment.id in ["Gym-Grid/Gridworld-TwoRoom-2x11"]:
+        if cfg.monitor.id in ["Button"]:
             with open_dict(cfg):
                 cfg.monitor.button_cell_id = 16
 
     # Fix max Q for infinite horizon MDPs
-    if cfg.environment.id in ["RiverSwim"]:
+    if cfg.environment.id in ["Gym-Grid/RiverSwim-6-v0"]:
         if cfg.agent.critic.q0_max == 1.0:  # optimistic
             cfg.agent.critic.q0_max = 50.0
         if cfg.agent.critic.q0_min == 1.0:
             cfg.agent.critic.q0_min = 50.0
 
     # Decay learning rate in stochastic monitors
-    if cfg.monitor.id in ["NMonitor"]:
+    if cfg.monitor.id in ["N"]:
         cfg.agent.critic.lr.min_value = min(0.1, cfg.agent.critic.lr.min_value)
         cfg.agent.critic.lr_visit.min_value = min(0.1, cfg.agent.critic.lr_visit.min_value)
 
