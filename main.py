@@ -17,17 +17,12 @@ import src.critic
 @hydra.main(version_base=None, config_path="configs", config_name="default")
 def run(cfg: DictConfig) -> None:
     config = OmegaConf.to_container(cfg, resolve=True, throw_on_missing=True)
-    # pprint(config)
 
-    if cfg.monitor.id in ["NExpertMonitor", "NSupporterMonitor"]:
+    if cfg.monitor.id in ["NExperts", "NSupporters"]:
         cfg.agent.critic.lr.min_value = min(0.1, cfg.agent.critic.lr.min_value)
         cfg.agent.critic.lr_visit.min_value = min(0.1, cfg.agent.critic.lr_visit.min_value)
 
-    if "prob" in cfg.monitor:
-        prob = "_" + str(cfg.monitor.prob)
-    else:
-        prob = ""
-    group = dict_to_id(cfg.environment) + "/" + str(cfg.monitor.id).replace('Monitor', '') + prob
+    group = dict_to_id(cfg.environment) + "/" + str(cfg.monitor.id) + "/" + str(cfg.monitor.prob)
 
     if cfg.experiment.datadir is not None:
         filepath = os.path.join(cfg.experiment.datadir,

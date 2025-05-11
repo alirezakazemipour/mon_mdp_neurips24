@@ -1,5 +1,5 @@
 # @package _global_
 
 monitor:
-  id: Full
+  id: MDP
   prob: 1

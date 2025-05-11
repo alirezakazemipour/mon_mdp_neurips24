@@ -1,5 +1,5 @@
 # @package _global_
 
 monitor:
-  id: RandomNonZero
+  id: SemiRandom
   prob: 0.5
