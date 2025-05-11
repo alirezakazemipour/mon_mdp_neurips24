@@ -38,7 +38,7 @@ BLACK = (0, 0, 0)
 GRAY = (100, 100, 100)
 
 GRIDS = {
-    "river_swim_6": [[EMPTY for _ in range(6)]],
+    "river_swim": [[EMPTY for _ in range(6)]],
     "corridor": [[EMPTY for _ in range(20)]],
     "2x2_empty": [
         [EMPTY, EMPTY],
@@ -105,8 +105,8 @@ GRIDS["corridor"][-1][-1] = GOOD
 GRIDS["empty"][-1][-1] = GOOD
 GRIDS["empty"][-1][0] = GOOD_SMALL
 
-GRIDS["river_swim_6"][-1][-1] = GOOD
-GRIDS["river_swim_6"][0][0] = GOOD_SMALL
+GRIDS["river_swim"][-1][-1] = GOOD
+GRIDS["river_swim"][0][0] = GOOD_SMALL
 
 
 def _move(row, col, a, nrow, ncol):

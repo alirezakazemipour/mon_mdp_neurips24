@@ -105,7 +105,7 @@ class Monitor(gymnasium.Wrapper):
         return obs, reward, terminated, truncated, env_info
 
 
-class Full(Monitor):
+class MDP(Monitor):
     """
     This monitor always shows the true reward, regardless of its state and action.
     The monitor reward is always 0.
@@ -136,7 +136,7 @@ class Full(Monitor):
         return self._monitor_get_state(), env_reward, 0.0, False
 
 
-class RandomNonZero(Monitor):
+class SemiRandom(Monitor):
     """
     This monitor randomly makes non-zero rewards unobservable.
     There are no monitor states and actions.
@@ -174,7 +174,7 @@ class RandomNonZero(Monitor):
         return self._monitor_get_state(), proxy_reward, monitor_reward, False
 
 
-class Random(Monitor):
+class FullRandom(Monitor):
     """
     This monitor randomly makes rewards unobservable.
     Each reward has a different probability of being observed, which is fixed
@@ -308,7 +308,7 @@ class Ask(Monitor):
         return self._monitor_get_state(), proxy_reward, monitor_reward, False
 
 
-class N(Monitor):
+class NSupporters(Monitor):
     """
     There are N monitors. At every time step, a random monitor is on.
     If the agent's action matches the monitor state, the agent observes the
@@ -610,7 +610,7 @@ class Button(Monitor):
         return obs, reward, terminated, truncated, env_info
 
 
-class NExpert(Monitor):
+class NExperts(Monitor):
     def __init__(self, env, monitor_cost=0.2, monitor_bonus=0.001, **kwargs):
         Monitor.__init__(self, env, **kwargs)
         self.n_monitors = kwargs["n_monitors"]

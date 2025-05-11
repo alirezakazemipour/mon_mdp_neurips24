@@ -137,10 +137,10 @@ def register_envs():
     )
 
     register(
-        id="RiverSwim-6-v0",
+        id="RiverSwim",
         entry_point="gym_grid.gridworld:RiverSwim",
         max_episode_steps=200,
         kwargs={
-            "grid": "river_swim_6",
+            "grid": "river_swim",
         },
     )
