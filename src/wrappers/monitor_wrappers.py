@@ -1,7 +1,7 @@
 import gymnasium
 from gymnasium import spaces
 import numpy as np
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 import pygame
 
 
@@ -183,7 +183,7 @@ class Ask(Monitor):
         return self._monitor_get_state(), proxy_reward, monitor_reward, False
 
 
-class Button(Monitor):
+class Button(Monitor, ABC):
     """
     Monitor for Gridworlds.
     The monitor is turned on/off by doing LEFT (environment action) where a button is.
