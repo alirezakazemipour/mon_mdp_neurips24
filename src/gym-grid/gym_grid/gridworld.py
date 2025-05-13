@@ -19,7 +19,7 @@ BAD = 11
 BAD_SMALL = 12
 WALL = -3
 
-REWARDS = defaultdict(lambda: 0.)
+REWARDS = defaultdict(lambda: 0)
 REWARDS[GOOD] = 1
 REWARDS[BAD] = -10
 REWARDS[GOOD_SMALL] = 0.1
@@ -39,7 +39,7 @@ GRAY = (100, 100, 100)
 
 GRIDS = {
     "river_swim": [[EMPTY for _ in range(6)]],
-    "20_straight": [[EMPTY for _ in range(20)]],
+    "corridor": [[EMPTY for _ in range(20)]],
     "2x2_empty": [
         [EMPTY, EMPTY],
         [EMPTY, GOOD],
@@ -49,12 +49,7 @@ GRIDS = {
         [EMPTY, EMPTY, EMPTY],
         [EMPTY, EMPTY, GOOD],
     ],
-    "3x3_stochastic": [
-        [EMPTY, BAD, GOOD],
-        [EMPTY, BAD, EMPTY],
-        [EMPTY, EMPTY, EMPTY],
-    ],
-    "3x3_empty_loop": [
+    "loop": [
         [EMPTY, LEFT, EMPTY],
         [EMPTY, RIGHT, UP],
         [EMPTY, EMPTY, GOOD],
@@ -64,8 +59,13 @@ GRIDS = {
         [EMPTY, BAD, EMPTY],
         [EMPTY, EMPTY, EMPTY],
     ],
-    "10x10_empty": [[EMPTY for _ in range(10)] for _ in range(10)],
-    "6x6_distract": [[EMPTY for _ in range(6)] for _ in range(6)],
+    "empty": [[EMPTY for _ in range(6)] for _ in range(6)],
+    "4x4_quicksand": [
+        [EMPTY, EMPTY, BAD, GOOD],
+        [EMPTY, EMPTY, BAD, EMPTY],
+        [EMPTY, QCKSND, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY, EMPTY],
+    ],
     "bottleneck": [
         [EMPTY, EMPTY, BAD, EMPTY, EMPTY, EMPTY],
         [EMPTY, EMPTY, BAD, EMPTY, BAD, EMPTY],
@@ -74,13 +74,7 @@ GRIDS = {
         [EMPTY, EMPTY, BAD, EMPTY, EMPTY, EMPTY],
         [GOOD_SMALL, EMPTY, BAD, EMPTY, EMPTY, GOOD],
     ],
-    "4x4_quicksand": [
-        [EMPTY, EMPTY, BAD, GOOD],
-        [EMPTY, EMPTY, BAD, EMPTY],
-        [EMPTY, QCKSND, EMPTY, EMPTY],
-        [EMPTY, EMPTY, EMPTY, EMPTY],
-    ],
-    "4x4_quicksand_distract": [
+    "hazard": [
         [EMPTY, GOOD_SMALL, BAD, GOOD],
         [EMPTY, BAD, EMPTY, EMPTY],
         [EMPTY, QCKSND, GOOD_SMALL, EMPTY],
@@ -92,17 +86,17 @@ GRIDS = {
         [RIGHT, EMPTY, QCKSND, GOOD_SMALL, EMPTY],
         [UP, EMPTY, EMPTY, EMPTY, EMPTY],
     ],
-    "bypass": [
-        [EMPTY, LEFT, GOOD, EMPTY, EMPTY],
-        [EMPTY, QCKSND, BAD, BAD, EMPTY],
+    "two_room_3x5": [
+        [EMPTY, EMPTY, LEFT, EMPTY, GOOD],
+        [EMPTY, EMPTY, QCKSND, EMPTY, EMPTY],
         [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
     ],
-    "3x4_corridor": [
+    "one_way": [
         [EMPTY, LEFT, LEFT, LEFT],
         [GOOD_SMALL, BAD_SMALL, BAD_SMALL, GOOD],
         [EMPTY, LEFT, LEFT, LEFT],
     ],
-    "2x11_two_room_distract": [
+    "two_room_2x11": [
         [GOOD_SMALL, EMPTY, EMPTY, EMPTY, RIGHT, DOWN, LEFT, EMPTY, EMPTY, EMPTY, GOOD],
         [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
     ],
@@ -115,10 +109,9 @@ GRIDS = {
     ],
 }
 
-GRIDS["10x10_empty"][-1][-1] = GOOD
-GRIDS["20_straight"][-1][-1] = GOOD
-GRIDS["bottleneck"][-1][-1] = GOOD
-GRIDS["bottleneck"][-1][0] = GOOD_SMALL
+GRIDS["corridor"][-1][-1] = GOOD
+GRIDS["empty"][-1][-1] = GOOD
+GRIDS["empty"][-1][0] = GOOD_SMALL
 
 GRIDS["river_swim"][-1][-1] = GOOD
 GRIDS["river_swim"][0][0] = GOOD_SMALL
@@ -283,10 +276,19 @@ class Gridworld(gym.Env):
         self.last_pos = None
 
     def _step(self, action: int):
+        terminated = False
+        reward = REWARDS[self.grid[self.agent_pos]]
+        if self.grid[self.agent_pos] in [GOOD, GOOD_SMALL]:
+            if action == STAY:  # positive rewards are collected only with STAY
+                terminated = True
+            else:
+                reward = 0
+
         self.last_pos = self.agent_pos
         if self.np_random.random() < self.random_action_prob:
             action = self.action_space.sample()
         self.last_action = action
+
         if self.grid[self.agent_pos] == QCKSND and self.np_random.random() > 0.1:
             pass  # fail to move in quicksand
         else:
@@ -308,18 +310,6 @@ class Gridworld(gym.Env):
 
         if self.grid[self.agent_pos] == WALL:
             self.agent_pos = self.last_pos
-
-        terminated = False
-        reward = REWARDS[self.grid[self.agent_pos]]
-        if self.grid[self.agent_pos] in [GOOD, GOOD_SMALL]:
-            if action == STAY:  # positive rewards are collected only with STAY
-                terminated = True
-            else:
-                reward = 0
-        if self.reward_noise_std > 0.0:
-            reward += self.np_random.normal() * self.reward_noise_std
-        if reward != 0.0 and self.nonzero_reward_noise_std > 0.0:
-            reward += self.np_random.normal() * self.nonzero_reward_noise_std
 
         return self.get_state(), reward, terminated, False, {}
 
@@ -591,9 +581,9 @@ class RiverSwim(Gridworld):
         terminated = False  # infinite horizon
         self.last_action = original_action
 
-        reward = 0
+        reward = 0.0
         if state == last and action == RIGHT and original_action == RIGHT:
-            reward = 1
+            reward = 1.0
         elif state == first and action == LEFT and original_action == LEFT:
             reward = 0.01
 
