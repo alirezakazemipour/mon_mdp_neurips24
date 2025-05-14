@@ -3,9 +3,5 @@ defaults:
   - _self_
 
 critic:
-  q0_min: -10.0
-  q0_max: -10.0
-  q0_visit_min: 0.0
-  q0_visit_max: 0.0
   r0_min: -10.0
   r0_max: -10.0
