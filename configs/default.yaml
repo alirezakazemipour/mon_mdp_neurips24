@@ -1,5 +1,5 @@
 defaults:
-  - agent: optimistic_init
+  - agent: default
   - environment: bottleneck
   - monitor: button
   - algorithm: q_visit

@@ -5,3 +5,5 @@ defaults:
 critic:
   q0_min: 1.0
   q0_max: 1.0
+  q0_visit_min: 1.0
+  q0_visit_max: 1.0

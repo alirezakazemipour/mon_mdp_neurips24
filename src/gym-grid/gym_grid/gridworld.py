@@ -276,13 +276,6 @@ class Gridworld(gym.Env):
         self.last_pos = None
 
     def _step(self, action: int):
-        terminated = False
-        reward = REWARDS[self.grid[self.agent_pos]]
-        if self.grid[self.agent_pos] in [GOOD, GOOD_SMALL]:
-            if action == STAY:  # positive rewards are collected only with STAY
-                terminated = True
-            else:
-                reward = 0
 
         self.last_pos = self.agent_pos
         if self.np_random.random() < self.random_action_prob:
@@ -310,6 +303,14 @@ class Gridworld(gym.Env):
 
         if self.grid[self.agent_pos] == WALL:
             self.agent_pos = self.last_pos
+
+        terminated = False
+        reward = REWARDS[self.grid[self.agent_pos]]
+        if self.grid[self.agent_pos] in [GOOD, GOOD_SMALL]:
+            if action == STAY:  # positive rewards are collected only with STAY
+                terminated = True
+            else:
+                reward = 0
 
         return self.get_state(), reward, terminated, False, {}
 
