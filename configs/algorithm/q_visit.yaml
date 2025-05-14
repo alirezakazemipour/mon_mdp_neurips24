@@ -5,6 +5,8 @@ algorithm:
 agent:
   critic:
     id: QTableCriticWithVisitQ
+    q0_min: -10.0
+    q0_max: -10.0
 
   actor:
     id: EpsilonGreedyWithVisitQ

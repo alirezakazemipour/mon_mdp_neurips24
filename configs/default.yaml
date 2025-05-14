@@ -1,5 +1,5 @@
 defaults:
-  - agent: default
+  - agent: optimistic_init
   - environment: bottleneck
   - monitor: button
   - algorithm: q_visit
@@ -18,7 +18,7 @@ wandb:
 experiment:
   datadir: null
   debugdir: null
-  rng_seed: 100
+  rng_seed: 0
   hide_progress_bar: False
 
 # This will prevent the creation of the 'output' and 'multirun' subfolders,

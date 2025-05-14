@@ -14,7 +14,7 @@ def td_target(rwd: np.array, term: np.array, q_next: np.array, gamma: float):
         rwd (np.array): r_t,
         term (np.array): True if s_t is terminal, False otherwise,
         q_next (np.array): max_a Q(s_{t+1}, a),
-        gammma (float): discount factor,
+        gamma (float): discount factor,
     """
 
     return rwd + gamma * (1.0 - term) * q_next
@@ -173,7 +173,8 @@ class QTableCriticWithVisitQ(QTableCritic):
                  n_obs_mon: int,
                  n_act_env: int,
                  n_act_mon: int,
-                 q0_visit: float,
+                 q0_visit_min: float,
+                 q0_visit_max: float,
                  gamma_visit: float,
                  lr_visit: DictConfig,
                  **kwargs,
@@ -184,7 +185,8 @@ class QTableCriticWithVisitQ(QTableCritic):
         self.q_visit = MSETable(*self.obs_shape,
                                 *self.act_shape,
                                 n_obs_env * n_obs_mon * n_act_env * n_act_mon,
-                                init_value_max=q0_visit,
+                                init_value_min=q0_visit_min,
+                                init_value_max=q0_visit_max,
                                 )
         self.q_visit_target = self.q_visit
         QTableCriticWithVisitQ.reset(self)

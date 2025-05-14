@@ -1,8 +1,9 @@
 critic:
   id: QTableCritic
-  q0_min: -10
-  q0_max: -10
-  q0_visit: 1
+  q0_min: -10.0
+  q0_max: -10.0
+  q0_visit_min: 1.0
+  q0_visit_max: 1.0
   r0_min: -0.1
   r0_max: 0.1
   gamma: 0.99
