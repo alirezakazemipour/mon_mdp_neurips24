@@ -8,5 +8,5 @@ params:
   experiment.datadir: ../Mon-MBIE-EB/data
   experiment.hide_progress_bar: True
   experiment.rng_seed: range(0, 30)
-  agent: optimistic_init
+  agent: default
   algorithm: q_visit
