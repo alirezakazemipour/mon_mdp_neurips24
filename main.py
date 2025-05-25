@@ -26,7 +26,7 @@ def run(cfg: DictConfig) -> None:
 
     if cfg.experiment.datadir is not None:
         filepath = os.path.join(cfg.experiment.datadir,
-                                "DEE",
+                                "DE2",
                                 os.path.split(cfg.environment.id)[-1],
                                 cfg.monitor.id + "_" + str(cfg.monitor.prob)
                                 )
